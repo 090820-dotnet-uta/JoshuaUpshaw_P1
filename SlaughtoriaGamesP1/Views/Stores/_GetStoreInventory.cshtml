@@ -1,0 +1,95 @@
+﻿@model IEnumerable<SlaughtoriaGamesP1.Models.Stores>
+
+<head>
+    <link href="css/hover.css" rel="stylesheet" media="all">
+    
+</head>
+
+<style>
+    .card {
+        background-color: transparent;
+        border-color: transparent;
+        align-items: center;
+        width: 100%;
+    }
+
+    .col {
+        box-sizing: border-box;
+        text-align: center;
+        width: 40%;
+        padding: 15px;
+        margin: 15px;
+        border: 5px inset #A2143C;
+        text-shadow: -2px 4px 3px black;
+        font-weight: 600;
+        font-size: larger;
+        background-color: #343A40;
+    }
+
+    .button {
+        background-color: #A2143C;
+        border: 5px outset #A2143C;
+        padding: 10px;
+        border-radius: 20px;
+        color: #DEE4E7;
+        margin: 5px;
+        text-decoration: none;
+    }
+
+    .button:hover {
+        border-style: inset;
+        color: #DEE4E7;
+        text-decoration: none;
+    }
+
+    .h1span {
+        text-shadow: -2px 4px 3px black;
+        border: inset 4px #A2143C;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+        background-color: #343A40;
+        padding: 7px;
+        margin: 10px;
+        margin-top: 20px;
+    }
+   
+</style>
+
+<h1 class="d-flex text-center justify-content-center">
+    <div>
+        <span class="h1span">Which store's inventory do you want to see?</span>
+    </div>
+</h1>
+<form asp-action="GetStoreInventory">
+    <div class="card">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div>
+                    Slaughtoria Games
+                </div>
+                <div>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </div>
+                <div>
+                    @Html.DisplayFor(modelItem => item.Street)
+                </div>
+                <div>
+                    @Html.DisplayFor(modelItem => item.City)
+                    @Html.DisplayFor(modelItem => item.State),
+                    @Html.DisplayFor(modelItem => item.Zip)
+                </div>
+                <div>
+                    <button class="button" type="submit" display="none">@Html.ActionLink("Select Store", "GetStoreInventory", "Stores", item)</button>
+                </div>
+            </div>
+        }
+    </div>
+</form>
+
+<p>
+    <div type="button">
+        <a asp-area="" asp-controller="Stores" asp-action="_StoreMenu">Return to Store Menu</a>
+    </div>
+
+</p>

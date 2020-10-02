@@ -1,0 +1,181 @@
+﻿@model SlaughtoriaGamesP1.Models.Customers
+
+@{
+    ViewData["Title"] = "SignUpCustomer";
+}
+
+<style>
+    .form {
+        align-content: center;
+        text-align: left;
+        text-shadow: -2px 4px 3px black;
+        box-sizing: border-box;
+        border: 5px inset #A2143C;
+        background-color: #343A40;
+        font-size: large;
+        font-weight: 700;
+        padding: 35px;
+        margin: 35px;
+        width: 500px;
+    }
+
+    h1 {
+        text-align: center;
+        text-shadow: -2px 4px 3px black;
+        border: 5px outset #A2143C;
+        background-color: #343A40;
+        border-top-right-radius: 30px;
+        border-top-left-radius: 30px;
+    }
+
+    .button {
+        align-content: center;
+        color: white;
+        text-shadow: -2px 4px 3px black;
+        border: 5px outset #A2143C;
+        background-color: #A2143C;
+        border-top-right-radius: 30px;
+        border-top-left-radius: 30px;
+        border-bottom-right-radius: 30px;
+        border-bottom-left-radius: 30px;
+
+        padding: 10px;
+        margin: 10px;
+        width: 100%;
+        text-align: center;
+    }
+</style>
+
+<h1>New Customer Registration</h1>
+<hr />
+<div class="row">
+    <div class="col d-flex justify-content-center">
+        <form asp-action="SignUpCustomer">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form">
+                <span class="text-center">General Information</span>
+                <hr />
+                <div class="form-group">
+                    <label asp-for="FirstName" class="control-label">First name:</label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LastName" class="control-label">Last name:</label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UserName" class="control-label">Username:</label>
+                    <input asp-for="UserName" class="form-control" />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Pword" class="control-label">Password:</label>
+                    <input asp-for="Pword" class="form-control" />
+                    <span asp-validation-for="Pword" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form">
+                <span class="text-center">Address Information</span>
+                <hr />
+                <div class="form-group">
+                    <label asp-for="City" class="control-label">City:</label>
+                    <input asp-for="City" class="form-control" />
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="State" class="control-label">State:</label>
+                    <select asp-for="State" class="form-control" id='stateList' name='State'></select>
+                    <span asp-validation-for="State" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Street" class="control-label">Street Address:</label>
+                    <input asp-for="Street" class="form-control" />
+                    <span asp-validation-for="Street" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Zip" class="control-label">Zip Code:</label>
+                    <input asp-for="Zip" class="form-control" type="number" maxlength="5" size="5" />
+                    <span asp-validation-for="Zip" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="AptNum" class="control-label">Apartment Number:</label>
+                    <input asp-for="AptNum" class="form-control" type="text" maxlength="5" size="5" />
+                    <span asp-validation-for="AptNum" class="text-danger"></span>
+                </div> 
+                <div class="form-group">
+                    <input type="submit" value="Create" class="button" />
+                </div>
+                <div>
+                    <a asp-controller="Customers" asp-action="_Login">Return to login screen</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    //Attaching an anonymous windows function to load it when the page loads instead of OnClick 
+    window.onload = () => {
+        var stateList = document.getElementById('stateList');
+        stateList.options[0] = new Option('---Select One---');
+        console.log("i ran");
+        stateList.options[1] = new Option('AK');
+        stateList.options[2] = new Option('AL');
+        stateList.options[3] = new Option('AR');
+        stateList.options[4] = new Option('AZ');
+        stateList.options[5] = new Option('CA');
+        stateList.options[6] = new Option('CO');
+        stateList.options[7] = new Option('CT');
+        stateList.options[8] = new Option('DE');
+        stateList.options[9] = new Option('FL');
+        stateList.options[10] = new Option('GA');
+        stateList.options[11] = new Option('HI');
+        stateList.options[12] = new Option('IA');
+        stateList.options[13] = new Option('ID');
+        stateList.options[14] = new Option('IL');
+        stateList.options[15] = new Option('IN');
+        stateList.options[16] = new Option('KS');
+        stateList.options[17] = new Option('KY');
+        stateList.options[18] = new Option('LA');
+        stateList.options[19] = new Option('MA');
+        stateList.options[20] = new Option('MD');
+        stateList.options[21] = new Option('ME');
+        stateList.options[22] = new Option('MI');
+        stateList.options[23] = new Option('MN');
+        stateList.options[24] = new Option('MO');
+        stateList.options[25] = new Option('MS');
+        stateList.options[26] = new Option('MT');
+        stateList.options[27] = new Option('NC');
+        stateList.options[28] = new Option('ND');
+        stateList.options[29] = new Option('NE');
+        stateList.options[30] = new Option('NH');
+        stateList.options[31] = new Option('NJ');
+        stateList.options[32] = new Option('NM');
+        stateList.options[33] = new Option('NV');
+        stateList.options[34] = new Option('NY');
+        stateList.options[35] = new Option('OH');
+        stateList.options[36] = new Option('OK');
+        stateList.options[37] = new Option('OR');
+        stateList.options[38] = new Option('PA');
+        stateList.options[39] = new Option('RI');
+        stateList.options[40] = new Option('SC');
+        stateList.options[41] = new Option('SD');
+        stateList.options[42] = new Option('TN');
+        stateList.options[43] = new Option('TX');
+        stateList.options[44] = new Option('UT');
+        stateList.options[45] = new Option('VA');
+        stateList.options[46] = new Option('VT');
+        stateList.options[47] = new Option('WA');
+        stateList.options[48] = new Option('WI');
+        stateList.options[49] = new Option('WV');
+        stateList.options[50] = new Option('WY');
+    };
+
+
+</script>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,120 @@
+﻿@model IEnumerable<SlaughtoriaGamesP1.Models.Stores> 
+
+
+<style>
+    .card {
+        background-color: transparent;
+        border-color: transparent;
+        align-items: center;
+        width: 100%;
+    }
+
+    .col {
+        box-sizing: border-box;
+        text-align: center;
+        width: 40%;
+        padding: 15px;
+        margin: 15px;
+        border: 5px inset #A2143C;
+        text-shadow: -2px 4px 3px black;
+        font-weight: 600;
+        font-size: larger;
+        background-color: #343A40;
+    }
+
+    .butt{
+        background-color: #A2143C;
+        border: 5px outset #A2143C;
+        padding: 10px;
+        border-radius: 20px;
+        color: #DEE4E7;
+        margin: 5px;
+    }
+
+    .butt:hover{
+        border-style: inset;
+        color: #DEE4E7;
+        text-decoration: none;
+    }
+
+    .h1span {
+        text-shadow: -2px 4px 3px black;
+        border: inset 4px #A2143C;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+        background-color: #343A40;
+        padding:7px;
+        margin: 10px;
+        margin-top: 20px;
+    }
+
+    audio{
+        display:none;
+    }
+
+</style>
+
+<h1 class="d-flex text-center justify-content-center" >
+    <div>
+        <span class="h1span">Please select a default store...</span>
+    </div>
+</h1>
+<form asp-action="SelectDefaultStore">
+    <div class="card">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div>
+                    Slaughtoria Games
+                </div>
+                <div>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </div>
+                <div>
+                    @Html.DisplayFor(modelItem => item.Street)
+                </div>
+                <div>
+                    @Html.DisplayFor(modelItem => item.City)
+                    @Html.DisplayFor(modelItem => item.State),
+                    @Html.DisplayFor(modelItem => item.Zip)
+                </div>
+                <div>
+                    <button class="butt" type="submit">@Html.ActionLink("Select Store", "SelectDefaultStore", "Stores", item)</button>
+                </div>
+            </div>
+        }
+    </div>
+
+</form>
+
+<p>
+    <div type="button">
+        <a asp-area="" asp-controller="Stores" asp-action="_StoreMenu">Return to Store Menu</a>
+    </div>
+    
+</p>
+<audio autoplay src="~/final_5f73cbbdea3ea600562fb17e_856566.mp4"></audio>
+<script>
+    $(audioElement).on('timeupdate', function () {
+        var vol = 1,
+            interval = 200; // 200ms interval
+        if (Math.floor(audioElement.currentTime) == 15) {
+            if (audioElement.volume == 1) {
+                var intervalID = setInterval(function () {
+                    // Reduce volume by 0.05 as long as it is above 0
+                    // This works as long as you start with a multiple of 0.05!
+                    if (vol > 0) {
+                        vol -= 0.05;
+                        // limit to 2 decimal places
+                        // also converts to string, works ok
+                        audioElement.volume = vol.toFixed(2);
+                    } else {
+                        // Stop the setInterval when 0 is reached
+                        clearInterval(intervalID);
+                    }
+                }, interval);
+            }
+        }
+    });
+</script>
+

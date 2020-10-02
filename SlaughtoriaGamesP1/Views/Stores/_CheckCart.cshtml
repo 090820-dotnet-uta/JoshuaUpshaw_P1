@@ -1,0 +1,30 @@
+﻿@model IEnumerable<SlaughtoriaGamesP1.Models.OrderInformation>
+
+<h1>
+    Items currently in your cart:
+</h1>
+@foreach(var item in Model)
+{
+<div class="contain">
+    <div>
+        @Html.DisplayFor(modelItem => item.OrderedProduct)
+    </div>
+    <div>
+        @Html.DisplayFor(modelItem => item.OrderedProductAmount)
+    </div>
+    <div>
+        @Html.DisplayFor(modelItem => item.UnitPrice)
+    </div>
+    <div>
+        @Html.DisplayFor(modelItem => item.StoreOrderedFrom)
+    </div>
+    <div>
+        <a asp-area="" asp-controller="Stores" asp-action="EditCartItem">
+            Edit
+        </a>
+        <a asp-area="" asp-controller="Stores" asp-action="DeleteCartItem">
+            Delete
+        </a>
+    </div>
+</div>
+}

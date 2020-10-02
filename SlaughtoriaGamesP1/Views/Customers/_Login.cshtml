@@ -1,0 +1,224 @@
+﻿@model Customers
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<style>
+
+    p span {
+        text-align: center;
+        text-decoration: solid;
+        font-size: x-large;
+        font-weight: 600;
+        text-shadow: 20px, 30px, 40px, #A2143C;
+        text-decoration: underline;
+        text-decoration: overline;
+        text-decoration-color: #343A40;
+        -webkit-animation: shadowAni 5s infinite;
+        -webkit-animation: colorBlend 5s infinite alternate-reverse;
+    }
+
+    .display-4 {
+        font-weight: 600;
+        font-family: New Century Schoolbook, TeX Gyre Schola, serif;
+        -webkit-animation: colorBlend 5s infinite alternate-reverse;
+        
+    }
+
+    @@-webkit-keyframes lineColor {
+        15% {
+            text-decoration: underline, overline;
+            text-decoration-color: #A2143C;
+        }
+
+        30% {
+            text-decoration: underline, overline;
+            text-decoration-color: #343A40;
+        }
+
+        45% {
+            text-decoration: underline, overline;
+            text-decoration-color: #A2143C;
+        }
+
+        60% {
+            text-decoration: underline, overline;
+            text-decoration-color: #343A40;
+        }
+
+        75% {
+            text-decoration: underline, overline;
+            text-decoration-color: #A2143C;
+        }
+
+        100% {
+            text-decoration: underline, overline;
+            text-decoration-color: #343A40;
+        }
+    }
+
+    @@-webkit-keyframes colorBlend {
+        15% {
+            color: #A2143C;
+        }
+
+        30% {
+            color: #343A40;
+        }
+
+        45% {
+            color: #A2143C;
+        }
+
+        60% {
+            color: #343A40;
+        }
+
+        75% {
+            color: #A2143C;
+        }
+
+        100% {
+            color: #343A40;
+        }
+    }
+
+    .form1 {
+        border: 5px inset #A2143C;
+        background-color: #343A40;
+        width: 50%;
+        text-shadow: -2px 4px 3px black;
+    }
+
+    input[type=text], input[type=password] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border-width: 5px;
+        border-style: inset;
+        border-color: #A2143C;
+        box-sizing: border-box;
+    }
+
+    .LoginBtn {
+        background-color: #A2143C;
+        border: 5px, inset, #A2143C;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        width: 100%;
+    }
+
+    button:hover {
+        opacity: 0.8;
+    }
+
+    .SignUpbtn {
+        border: 5px, inset, #A2143C;
+        width: auto;
+        padding: 10px 18px;
+        background-color: #A2143C;
+        color: white;
+        text-align: left;
+        text-decoration: none;
+    }
+
+    .imgcontainer {
+        text-align: center;
+        margin: 24px 0 12px 0;
+    }
+
+    img.avatar {
+        border-radius: 50%;
+        border-style: ridge;
+        border-width: 3px;
+        border-color: #A2143C;
+        background-color: ghostwhite;
+    }
+
+    .container {
+        padding: 16px;
+    }
+
+    span.psw {
+        float: right;
+        padding-top: 16px;
+    }
+
+    .lgnfrm {
+        font-weight: bold;
+        padding: 6px;
+        border-width: 3px;
+        border-style: ridge;
+        border-color: #A2143C;
+        border-top: none;
+        text-shadow: -2px 4px 3px black;
+    }
+    /* Change styles for span and Sign Up button on extra small screens */
+    @@media screen and (max-width: 300px) {
+        span.psw {
+            display: block;
+            float: none;
+        }
+
+        .SignUpbtn {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="text-center">
+    <h1 class="display-4">
+        <span>Welcome to Slaughtoria Games!</span>
+    </h1>
+    <p>
+        <img src="~/Causes_fear.png" />
+        <span>Where true 5heads shop</span>
+        <img src="~/Causes_fear.png" />
+    </p>
+</div>
+
+<body>
+    <div class="d-flex justify-content-center">
+        <form class = "form1"  asp-action="Login" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <h2 class="d-flex justify-content-center">
+                <span class="lgnfrm">Login Form</span>
+            </h2>
+            <div class="imgcontainer">
+                <img src="~/avatar150.png" alt="picasion.com" class="avatar">
+            </div>
+
+            <div class="container">
+                <label for="UserName"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" name="UserName" required>
+                <span asp-validation-for="UserName" class="text-danger"></span>
+                <div>
+                    <label for="Pword"><b>Password</b></label>
+                    <input type="password" placeholder="Enter Password" name="Pword" required>
+                    <span asp-validation-for="Pword" class="text-danger"></span>
+                </div>
+               
+
+                <input class="LoginBtn" type="submit" value="Login">
+
+                <label>
+                    <input type="checkbox" checked="checked" name="remember"> <strong>Remember me</strong>
+                </label>
+            </div>
+
+            <div class="container" style="background-color:#343A40;">
+                <a asp-area="" asp-controller="Customers" asp-action="_SignUpCustomer" display="none">
+                    <button type="button" class="SignUpbtn">
+                        Sign Up
+                    </button>
+                </a>
+                <span class="psw"><strong>Forgot <a asp-area="" asp-controller="Home" asp-action="Index" display="none">password?</a></strong></span>
+            </div>
+        </form>
+    </div>
+
+
+</body>

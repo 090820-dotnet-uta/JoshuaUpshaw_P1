@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@ViewData["Title"] - Slaughtoria Games</title>
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+        <link href="css/hover.css" rel="stylesheet" media="all">
+
+    </head>
+
+    <style>
+        .searchBtn {
+            background-color: transparent;
+            border: 2px outset #A2143C;
+            border-bottom-right-radius: 20px;
+            border-top-right-radius: 20px;
+            margin-left: 9px;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            color: darkgrey;
+            text-shadow: 2px 4px 3px black;
+        
+        }
+
+        .searchBtn:hover{
+            border-style: inset;
+        }
+
+        .searchInput {
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-left: 3px;
+            border: 3px outset #343A40;
+        }
+
+        .searchInput:hover{
+            border-style: inset;
+            border-color: darkgrey;
+        }
+
+        .searchInput:focus{
+             border: 3px inset #A2143C;
+             outline-offset: -2px;
+        }
+    </style>
+
+
+    <body>
+        <header>
+            <nav class="navbar navbar-toggleable-lg navbar-dark bg-dark box-shadow mb-3">
+                <div class="container">
+                    <a class="navbar-brand" id="shadowAni" asp-area="" asp-controller="Customers" asp-action="Login">
+                        <img src="~/Icon_corruption_vmp.png" width="30" height="30" class="d-inline-block align-top" alt="Icon" loading="lazy">
+                        Slaughtoria Games
+                    </a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbar">
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                <img src ="~/Icon_corruption_chs.png"> 
+                                Home
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">
+                                    <img src="~/Icon_corruption_chs.png">
+                                Privacy
+                                </a>
+                            </li>
+                            <li>
+                                <form class="form-inline" asp-area="" asp-controller="Customers" asp-action="_ListSearchResults">
+                                    <div asp-validation-summary="All">
+                                        <input class="searchInput" type="search" placeholder="Search for user..." name="name" aria-label="Search">
+                                        <button class="searchBtn" type="submit">Search</button>
+                                    </div>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+
+        @*<footer class="footer text-muted navbar fixed-bottom">
+            <div class="container">
+                &copy; <strong>2020 - Slaughtoria Games LLC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></strong>
+            </div>
+        </footer>*@
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @RenderSection("Scripts", required: false)
+    </body>
+</html>

@@ -1,0 +1,36 @@
+﻿@model IEnumerable<SlaughtoriaGamesP1.Models.InventoryProductInfo>
+
+
+<style>
+    .card{
+        padding: 15px;
+        margin: 15px;
+    }
+</style>
+
+<h1>Shop Inventory</h1>
+
+@foreach (var item in Model)
+{
+    <div class="card">
+        <div>
+            @Html.DisplayFor(modelItem => item.Skunum)
+        </div>
+
+        <div>
+            @Html.DisplayFor(modelItem => item.ProductName)
+        </div>
+
+        <div>
+            @Html.DisplayFor(modelItem => item.UnitPrice)
+        </div>
+
+        <div>
+            @Html.DisplayFor(modelItem => item.ProductDescrip)
+        </div>
+
+        <div>
+            @Html.DisplayFor(modelItem => item.ProductCurrentQuantity)
+        </div>
+    </div>
+}

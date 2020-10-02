@@ -1,0 +1,46 @@
+﻿@model IEnumerable<SlaughtoriaGamesP1.Models.OrderInformation>
+
+<style>
+    .card{
+        border: 5px groove #086c1d;
+    }
+
+    body {
+        background-image: url(../skavenbkg.gif);
+        background-repeat: no-repeat;
+        background-position: top;
+        background-size: cover;
+        height: 100vh;
+        padding: 0;
+        margin: 0;
+    }
+</style>
+
+<div class="contain">
+    @foreach (var item in Model)
+    {
+        <div class="card">
+            <div>
+                @Html.DisplayFor(modelItem => item.OrderId)
+            </div>
+            <div>
+                @Html.DisplayFor(modelItem => item.OrderDate)
+            </div>
+            <div>
+                @Html.DisplayFor(modelItem => item.OrderedProduct)
+            </div>
+            <div>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </div>
+            <div>
+                @Html.DisplayFor(modelItem => item.OrderedProductAmount)
+            </div>
+            <div>
+                @Html.DisplayFor(modelItem => item.StoreOrderedFrom)
+            </div>
+            <div>
+                @Html.DisplayFor(modelItem => item.OrderTotal)
+            </div>
+        </div>
+    }
+</div>
