@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\NeonJ\\source\\repos\\SlaughtoriaGamesP1\\SlaughtoriaGamesP1.csproj": {}
+    "C:\\Users\\NeonJ\\OneDrive\\Documents\\GitHub\\JoshuaUpshaw_P1\\SlaughtoriaGamesP1\\SlaughtoriaGamesP1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\NeonJ\\source\\repos\\SlaughtoriaGamesP1\\SlaughtoriaGamesP1.csproj": {
+    "C:\\Users\\NeonJ\\OneDrive\\Documents\\GitHub\\JoshuaUpshaw_P1\\SlaughtoriaGamesP1\\SlaughtoriaGamesP1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\NeonJ\\source\\repos\\SlaughtoriaGamesP1\\SlaughtoriaGamesP1.csproj",
+        "projectUniqueName": "C:\\Users\\NeonJ\\OneDrive\\Documents\\GitHub\\JoshuaUpshaw_P1\\SlaughtoriaGamesP1\\SlaughtoriaGamesP1.csproj",
         "projectName": "SlaughtoriaGamesP1",
-        "projectPath": "C:\\Users\\NeonJ\\source\\repos\\SlaughtoriaGamesP1\\SlaughtoriaGamesP1.csproj",
+        "projectPath": "C:\\Users\\NeonJ\\OneDrive\\Documents\\GitHub\\JoshuaUpshaw_P1\\SlaughtoriaGamesP1\\SlaughtoriaGamesP1.csproj",
         "packagesPath": "C:\\Users\\NeonJ\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\NeonJ\\source\\repos\\SlaughtoriaGamesP1\\obj\\",
+        "outputPath": "C:\\Users\\NeonJ\\OneDrive\\Documents\\GitHub\\JoshuaUpshaw_P1\\SlaughtoriaGamesP1\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\NeonJ\\AppData\\Roaming\\NuGet\\NuGet.Config",

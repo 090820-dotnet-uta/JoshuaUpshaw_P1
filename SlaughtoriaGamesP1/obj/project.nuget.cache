@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "U3Ou3L2sD8cnzKsmAOKHSaV5yWGaDVZmgfgfuDA5t82Wb0v2Gk72R0XRtEZlx7F4NTGkfO4mm0aUfye/Aloonw==",
+  "dgSpecHash": "0EUaPUj9gMOXxbzwRtk86YjW5FAHli4TXQ+zl2hyjmSegbi2veIsiX8QczEARyTnckEeseiPuQk3rRS0oCZ9aA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\NeonJ\\source\\repos\\SlaughtoriaGamesP1\\SlaughtoriaGamesP1.csproj",
+  "projectFilePath": "C:\\Users\\NeonJ\\OneDrive\\Documents\\GitHub\\JoshuaUpshaw_P1\\SlaughtoriaGamesP1\\SlaughtoriaGamesP1.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\NeonJ\\.nuget\\packages\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\NeonJ\\.nuget\\packages\\microsoft.aspnetcore.razor\\2.2.0\\microsoft.aspnetcore.razor.2.2.0.nupkg.sha512",
