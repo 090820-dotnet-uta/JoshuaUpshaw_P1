@@ -1,5 +1,59 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model IEnumerable<SlaughtoriaGamesP1.Models.OrderInformation>
+
+<h1>
+    Thank you for your purchase!
+</h1>
+
+<div>
+    You have ordered the following items...
+    @foreach (var item in Model)
+    {
+        <div>
+            Ordered Product:
+            @Html.DisplayFor(modelItem => item.ProductName)
+        </div>
+        <div>
+            SKU #
+            @Html.DisplayFor(modelItem => item.OrderedProduct)
+        </div>
+        <div>
+            Quantity:
+            @Html.DisplayFor(modelItem => item.OrderedProductAmount)
+        </div>
+    }
+    <div>
+        Order total: $
+        @for (int i = 1; i == (Model.Count() - (Model.Count() - 1)); i++)
+        {
+            foreach (var item in Model)
+            {
+
+                @Html.DisplayFor(modelItem => item.OrderTotal)
+                i++;
+                if(i>1)
+                {
+                    break;
+                }
+            }
+        }
+    </div>
+    <div>
+        Order Date:
+        @for (int i = 1; i == (Model.Count() - (Model.Count() - 1)); i++)
+        {
+            foreach (var item in Model)
+            {
+
+                @Html.DisplayFor(modeilItem => item.OrderDate)
+                i++;
+                if(i>1)
+                {
+                    break;
+                }
+            }
+        }
+    </div>
+    <div>
+        <a onclick="history.back()">Return to order screen</a>
+    </div>
+</div>

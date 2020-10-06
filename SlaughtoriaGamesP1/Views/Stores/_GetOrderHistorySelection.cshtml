@@ -54,49 +54,59 @@
         border-top-left-radius: 20px;
         border-top-right-radius: 20px;
     }
+
     a {
         text-decoration: none;
-        color: #343A40;
+        color: black;
     }
 
-    a:hover{
-        text-decoration: none;
-        color: #343A40;
-    }
+        a:hover {
+            text-decoration: none;
+            color: #343A40;
+        }
 
     .button {
         border: 3px outset #4C7E12;
         border-radius: 20px;
         background-color: #4C7E12;
         text-decoration: none;
-        text-shadow: 5px 5px 5px black;
+        text-shadow: 5px 5px 5px #343A40;
         padding: 5px;
-        
+        color: black;
     }
 
-    .button:hover {
-        border: 3px inset #4C7E12;
-    }
+        .button:hover {
+            border: 3px inset #4C7E12;
+        }
 
-    .button:focus {
-        border: 3px inset #6F9741;
-        background-color: #6F9741;
-    }
+        .button:focus {
+            border: 3px inset #6F9741;
+            background-color: #6F9741;
+        }
 
     /* Dropdown Button */
     .btnDrop {
-        background-color: #3498DB;
-        color: white;
-        padding: 16px;
-        font-size: 16px;
-        border: none;
-        cursor: pointer;
+        border: 3px outset #4C7E12;
+        border-radius: 20px;
+        background-color: #6F9741;
+        text-decoration: none;
+        text-shadow: 5px 5px 5px #343A40;
+        padding: 7px;
+        background-color: #4C7E12;
+        color: black;
+        font-weight: 500;
+        font-size: large;
     }
 
-    /* Dropdown button on hover & focus */
-    .btnDrop:hover, .btnDrop:focus {
-        background-color: #2980B9;
-    }
+        /* Dropdown button on hover & focus */
+        .btnDrop:hover{
+            border: 3px inset #4C7E12;
+        }
+
+         .btnDrop:focus{
+            border: 3px inset #6F9741;
+            background-color: #6F9741;
+        }
 
     /* The container <div> - needed to position the dropdown content */
     .dDown {
@@ -107,29 +117,51 @@
     /* Dropdown Content (Hidden by Default) */
     .dDown-content {
         position: absolute;
-        background-color: #f1f1f1;
+        background-color: #4C7E12;
         min-width: 160px;
         max-height: 200px;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
         z-index: 1;
         overflow-y: scroll;
+        padding: 5px;
+        border: 3px solid #4C7E12;
     }
 
-    /* Links inside the dropdown */
-    .dDown-content a {
-        color: black;
-        padding: 12px 16px;
+        /* Links inside the dropdown */
+        .dDown-content a {
+            color: black;
+            padding: 6px 6px;
+            text-decoration: none;
+            display: block;
+            font-size: large;
+            text-shadow: 5px 5px 5px #343A40;
+        }
+
+    .hidedrop {
+        display: none;
+    }
+
+    .showdrop {
+        display: block;
+    }
+
+    .back {
+        border: 3px outset #4C7E12;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        background-color: #4C7E12;
         text-decoration: none;
-        display: block;
+        text-shadow: 5px 5px 5px black;
+        padding: 5px;
+    }
+    .back:hover {
+        border: 3px inset #4C7E12;
     }
 
-    .hidedrop{
-        display:none;
-    }
-
-    .showdrop{
-        display: block;
+    .back:focus {
+        border: 3px inset #6F9741;
+        background-color: #6F9741;
     }
 </style>
 
@@ -146,22 +178,29 @@
                 int orderHistoryType = 1;
                 SlaughtoriaGamesP1.Models.Stores store = new SlaughtoriaGamesP1.Models.Stores();
             }
-            <img src="~/Icon_corruption_skv.png" alt="Skaven" />
+            <div>
+                <img src="~/Icon_corruption_skv.png" alt="Skaven" />
+            </div>
             <button class="button" display="none">@Html.ActionLink("Your order history", "GetOrderHistorySelection", "Stores", new { orderHistoryType, store })</button>
-            <img src="~/Icon_corruption_skv.png" alt="Skaven" />
+            <div>
+                <img src="~/Icon_corruption_skv.png" alt="Skaven" />
+            </div>
         </div>
     </div>
     <div class="one">
         <div class="two" style="border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;">
             <div class="dDown">
+                <img src="~/Icon_corruption_skv.png" alt="Skaven" />
                 <button onclick="storeDropdown()" class="btnDrop">Dropdown</button>
+                <img src="~/Icon_corruption_skv.png" alt="Skaven" />
                 <div id="dropCon" class="dDown-content hidedrop">
+
                     @foreach (var item in Model)
                     {
-                            string id = item.StoreId.ToString();
-                            string city = item.City;
-                            string linkText = id + ") " + city;
-                        
+                        string id = item.StoreId.ToString();
+                        string city = item.City;
+                        string linkText = id + ") " + city;
+
                         <a>@Html.ActionLink(linkText, "_StoreOrderHistory", item)</a>
                     }
                 </div>
@@ -169,47 +208,43 @@
             </div>
         </div>
     </div>
-</body>
 
+</body>
+<button class="back">
+    <a> @Html.ActionLink("Return to store menu", "_StoreMenu", "Shared")</a>
+</button>
 <script>
     var mydroplist = document.querySelector("#dropCon");
     console.log(mydroplist);
-    
+
 
     document.querySelector(".btnDrop").addEventListener("click", (e) => {
         console.log(e);
-        if (mydroplist.classList.contains("showdrop"))
-        {
+        if (mydroplist.classList.contains("showdrop")) {
             mydroplist.classList.remove("showdrop");
             mydroplist.classList.add("hidedrop");
         }
-        else if (mydroplist.classList.contains("hidedrop"))
-        {
+        else if (mydroplist.classList.contains("hidedrop")) {
             mydroplist.classList.remove("hidedrop");
             mydroplist.classList.add("showdrop");
         }
-       
+
 
     })
     /* When the user clicks on the button,
     toggle between hiding and showing the dropdown content */
-    function storeDropdown()
-    {
+    function storeDropdown() {
         document.getElementById("dropCon").classList.toggle("show");
     }
 
     // Close the dropdown menu if the user clicks outside of it
-    window.onclick = function(event)
-    {
-        if (!event.target.matches('.btnDrop'))
-        {
+    window.onclick = function (event) {
+        if (!event.target.matches('.btnDrop')) {
             var dropdowns = document.getElementsByClassName("dDown-content");
             var i;
-            for (i = 0; i < dropdowns.length; i++)
-            {
+            for (i = 0; i < dropdowns.length; i++) {
                 var openDropdown = dropdowns[i];
-                if (openDropdown.classList.contains('show'))
-                {
+                if (openDropdown.classList.contains('show')) {
                     openDropdown.classList.remove('show');
                 }
             }

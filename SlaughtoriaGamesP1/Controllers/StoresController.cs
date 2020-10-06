@@ -20,8 +20,8 @@ namespace SlaughtoriaGamesP1.Controllers
     public class StoresController : Controller
     {
         //TODO make sure every screen gives option to return to previous screen
-        private readonly ILogger<StoresController> _logger;
-        private readonly SGDB2Context _db;
+        private  ILogger<StoresController> _logger;
+        private  SGDB2Context _db;
         private IMemoryCache _cache;
         public List<Stores> store;
         public Customers loggedInCustomer;
@@ -52,8 +52,12 @@ namespace SlaughtoriaGamesP1.Controllers
         /// <returns>Store list</returns>
         public IActionResult _SelectDefaultStore()
         {
-            var storeList = (from Stores in _db.Stores
-                             select Stores).ToList();
+            if (!_cache.TryGetValue("loggedInCustomer", out loggedInCustomer))
+            {
+                //If the user isn't logged in, return to login screen
+                return View("_Login");
+            }
+            var storeList = StoreMethods.SelectListOfStores(_db);
            
             return View(storeList);
         }
@@ -74,10 +78,9 @@ namespace SlaughtoriaGamesP1.Controllers
             _logger.LogInformation("Logged in customer updated on cache");
 
             //Update the default store in the database 
-            var dbCust = (from Customers in _db.Customers
-                          where loggedInCustomer.CustomerId == Customers.CustomerId
-                          select Customers).ToList().FirstOrDefault();
+            var dbCust = StoreMethods.SetDefaultStore(_db, loggedInCustomer);
             dbCust.DefaultStore = storeSelection;
+
             _db.SaveChanges();
             _logger.LogInformation("Logged in customer updated on database");
 
@@ -92,8 +95,12 @@ namespace SlaughtoriaGamesP1.Controllers
         /// <returns>List of stores</returns>
         public IActionResult _GetStoreInventory()
         {
-            var storeList = (from Stores in _db.Stores
-                             select Stores).ToList();
+            if (!_cache.TryGetValue("loggedInCustomer", out loggedInCustomer))
+            {
+                //If the user isn't logged in, return to login screen
+                return View("_Login");
+            }
+            var storeList = StoreMethods.SelectListOfStores(_db);
 
             return View(storeList);
         }
@@ -163,8 +170,12 @@ namespace SlaughtoriaGamesP1.Controllers
         /// <returns>Order history selection view</returns>
         public IActionResult _GetOrderHistorySelection()
         {
-            var storeList = (from Stores in _db.Stores
-                             select Stores).ToList();
+            if (!_cache.TryGetValue("loggedInCustomer", out loggedInCustomer))
+            {
+                //If the user isn't logged in, return to login screen
+                return View("_Login");
+            }
+            var storeList = StoreMethods.SelectListOfStores(_db);
             return View(storeList);
         }
 
@@ -186,6 +197,7 @@ namespace SlaughtoriaGamesP1.Controllers
                 var custOrders = (from Orders in _db.Orders
                                   where Orders.WhoOrdered == loggedInCustomer.CustomerId
                                   select new { Orders.OrderDate,
+                                                Orders.OrderTotal,
                                                 Orders.OrderId,
                                                 Orders.OrderedProduct,
                                                 Orders.OrderedProductAmount,
@@ -207,6 +219,7 @@ namespace SlaughtoriaGamesP1.Controllers
                                      orderby Orders.OrderDate descending
                                      select new {
                                          Orders.OrderId,
+                                         Orders.OrderTotal,
                                          Orders.OrderedProduct,
                                          Products.ProductName,
                                          Orders.OrderedProductAmount,
@@ -231,75 +244,10 @@ namespace SlaughtoriaGamesP1.Controllers
                     item.StoreOrderedFrom = order.StoreOrderedFrom;
                     item.WhoOrdered = order.WhoOrdered;
                     item.OrderDate = order.OrderDate;
+                    item.OrderTotal = order.OrderTotal;
                     orderInfo.Add(item);
                 }
                 return View("_CustomerOrderHistory", orderInfo);
-            }
-            else if(orderHistoryType == 2) //User selects to see a store's order history
-            {
-                //user selected to see store history, selected store now utilized
-                int storeSelection = store.StoreId;
-
-                //Select all the orders associated with logged in customer
-                var storeOrders = (from Orders in _db.Orders
-                                  where Orders.StoreOrderedFrom == storeSelection
-                                   select new
-                                   {
-                                       Orders.OrderDate,
-                                       Orders.OrderId,
-                                       Orders.OrderedProduct,
-                                       Orders.OrderedProductAmount,
-                                       Orders.StoreOrderedFrom,
-                                       Orders.WhoOrdered
-                                   }).ToList();
-
-                //Select all the product info 
-                var orderItems = (from Products in _db.Products
-                                  where Products.IsInBundle == false
-                                  select new
-                                  {
-                                      Products.Skunum,
-                                      Products.ProductName,
-                                      Products.UnitPrice,
-                                      Products.ProductDiscount
-                                  }).ToList();
-
-                //Get product info on all items in the order 
-                var custOrderInfo = (from Orders in storeOrders
-                                     from Products in orderItems
-                                     where Orders.OrderedProduct == Products.Skunum
-                                     orderby Orders.OrderDate descending
-                                     select new
-                                     {
-                                         Orders.OrderId,
-                                         Orders.OrderedProduct,
-                                         Products.ProductName,
-                                         Orders.OrderedProductAmount,
-                                         Products.UnitPrice,
-                                         Products.ProductDiscount,
-                                         Orders.StoreOrderedFrom,
-                                         Orders.WhoOrdered,
-                                         Orders.OrderDate,
-                                     }).ToList();
-
-                //Fresh instantiation of the OrderInfo list for populating 
-                orderInfo = new List<OrderInformation>();
-                foreach (var order in custOrderInfo)
-                {
-                    //Create and add a new order to the list of order information to be displayed
-                    OrderInformation item = new OrderInformation();
-                    item.OrderId = order.OrderId;
-                    item.OrderedProduct = order.OrderedProduct;
-                    item.ProductName = order.ProductName;
-                    item.OrderedProductAmount = order.OrderedProductAmount;
-                    item.UnitPrice = order.UnitPrice;
-                    item.ProductDiscount = order.ProductDiscount;
-                    item.StoreOrderedFrom = order.StoreOrderedFrom;
-                    item.WhoOrdered = order.WhoOrdered;
-                    item.OrderDate = order.OrderDate;
-                    orderInfo.Add(item);
-                }
-                return View("_StoreOrderHistory", orderInfo);
             }
             return View("_GetOrderHistorySelection");
         }
@@ -320,9 +268,74 @@ namespace SlaughtoriaGamesP1.Controllers
         /// </summary>
         /// <param name="storeOrders"></param>
         /// <returns>store order history view</returns>
-        public IActionResult _StoreOrderHistory(List<OrderInformation> storeOrders)
+        public IActionResult _StoreOrderHistory(Stores store)
         {
-            return View(storeOrders);
+            //user selected to see store history, selected store now utilized
+            int storeSelection = store.StoreId;
+
+            //Select all the orders associated with logged in customer
+            var storeOrders = (from Orders in _db.Orders
+                               where Orders.StoreOrderedFrom == store.StoreId
+                               select new
+                               {
+                                   Orders.OrderDate,
+                                   Orders.OrderId,
+                                   Orders.OrderedProduct,
+                                   Orders.OrderedProductAmount,
+                                   Orders.StoreOrderedFrom,
+                                   Orders.WhoOrdered,
+                                   Orders.OrderTotal
+                               }).ToList();
+
+            //Select all the product info 
+            var orderItems = (from Products in _db.Products
+                              where Products.IsInBundle == false
+                              select new
+                              {
+                                  Products.Skunum,
+                                  Products.ProductName,
+                                  Products.UnitPrice,
+                                  Products.ProductDiscount
+                              }).ToList();
+
+            //Get product info on all items in the order 
+            var storeOrderInfo = (from Orders in storeOrders
+                                  from Products in orderItems
+                                  where Orders.OrderedProduct == Products.Skunum
+                                  orderby Orders.OrderDate descending
+                                  select new
+                                  {
+                                      Orders.OrderId,
+                                      Orders.OrderedProduct,
+                                      Products.ProductName,
+                                      Orders.OrderedProductAmount,
+                                      Products.UnitPrice,
+                                      Products.ProductDiscount,
+                                      Orders.StoreOrderedFrom,
+                                      Orders.WhoOrdered,
+                                      Orders.OrderDate,
+                                      Orders.OrderTotal
+                                  }).ToList();
+
+            //Fresh instantiation of the OrderInfo list for populating 
+            orderInfo = new List<OrderInformation>();
+            foreach (var order in storeOrderInfo)
+            {
+                //Create and add a new order to the list of order information to be displayed
+                OrderInformation item = new OrderInformation();
+                item.OrderId = order.OrderId;
+                item.OrderedProduct = order.OrderedProduct;
+                item.ProductName = order.ProductName;
+                item.OrderedProductAmount = order.OrderedProductAmount;
+                item.UnitPrice = order.UnitPrice;
+                item.ProductDiscount = order.ProductDiscount;
+                item.StoreOrderedFrom = order.StoreOrderedFrom;
+                item.WhoOrdered = order.WhoOrdered;
+                item.OrderDate = order.OrderDate;
+                item.OrderTotal = order.OrderTotal;
+                orderInfo.Add(item);
+            }
+            return View(orderInfo);
         }
 
         /// <summary>
@@ -331,6 +344,11 @@ namespace SlaughtoriaGamesP1.Controllers
         /// <returns></returns>
         public IActionResult GetCustomerStoreInventory()
         {
+            if (!_cache.TryGetValue("loggedInCustomer", out loggedInCustomer))
+            {
+                //If the user isn't logged in, return to login screen
+                return View("_Login");
+            }
             //Get the logged in customer
             var loggedIn = _cache.Get("loggedInCustomer");
             loggedInCustomer = (Customers)loggedIn;
@@ -392,7 +410,7 @@ namespace SlaughtoriaGamesP1.Controllers
             //TODO (maybe) create a new table that gives each product the appropriate logo for their system
             InventoryProductSelect select = new InventoryProductSelect();
             select.inventoryitem = inventoryInfo;
-            return View("_SelectItem", select);
+            return View("_SelectItem", inventoryInfo);
         }
 
         /// <summary>
@@ -422,20 +440,45 @@ namespace SlaughtoriaGamesP1.Controllers
             List<OrderInformation> cart = new List<OrderInformation>();
             cart = (List<OrderInformation>)itemCart;
 
-            OrderInformation newCartItem = new OrderInformation();
-            newCartItem.OrderedProduct = selectedItem.Skunum;
-            newCartItem.OrderedProductAmount = numOrdered;
-            newCartItem.ProductName = selectedItem.ProductName;
-            newCartItem.UnitPrice = numOrdered * (selectedItem.UnitPrice*(1-selectedItem.ProductDiscount)); //Total price of that item given the discount and num ordered
-            newCartItem.WhoOrdered = loggedInCustomer.CustomerId;
-            newCartItem.StoreOrderedFrom = loggedInCustomer.DefaultStore;
-            newCartItem.IsBundle = selectedItem.IsBundle;
-            newCartItem.IsInBundle = selectedItem.IsInBundle;
-            newCartItem.BundleId = selectedItem.BundleId;
-            cart.Add(newCartItem); //Add new cart item to our cart
-            _cache.Set("Cart", cart); //Set our cart to be the new cart
+            //Check to see if the product is already in the cart or a new cart item
+            OrderInformation newSKU = new OrderInformation();
+            newSKU.OrderedProduct = selectedItem.Skunum;
+            newSKU.OrderedProductAmount = selectedItem.OrderedAmt;
+            int matchWasFound = 0;
+            foreach(var item in cart)
+            {
+                if(newSKU.OrderedProduct == item.OrderedProduct)
+                {
+                    matchWasFound++;
+                }
+            }
+            if(matchWasFound != 0)
+            {
+                //Grab the item from the cart
+                var existingItem = StoreMethods.SelectCartItem(newSKU, cart);
 
-            return RedirectToAction("GetCustomerStoreInventory");
+                //Update the existing item's ordered amount and the total price for the item
+                existingItem.OrderedProductAmount += newSKU.OrderedProductAmount;
+                existingItem.UnitPrice = existingItem.OrderedProductAmount * (existingItem.UnitPrice * (1 - existingItem.ProductDiscount));
+                _cache.Set("Cart", cart);
+                return RedirectToAction("GetCustomerStoreInventory");
+            }
+            else //If this is the first time this item has been added, create a new cart object
+            {
+                OrderInformation newCartItem = new OrderInformation();
+                newCartItem.OrderedProduct = selectedItem.Skunum;
+                newCartItem.OrderedProductAmount = numOrdered;
+                newCartItem.ProductName = selectedItem.ProductName;
+                newCartItem.UnitPrice = numOrdered * (selectedItem.UnitPrice*(1-selectedItem.ProductDiscount)); //Total price of that item given the discount and num ordered
+                newCartItem.WhoOrdered = loggedInCustomer.CustomerId;
+                newCartItem.StoreOrderedFrom = loggedInCustomer.DefaultStore;
+                newCartItem.IsBundle = selectedItem.IsBundle;
+                newCartItem.IsInBundle = selectedItem.IsInBundle;
+                newCartItem.BundleId = selectedItem.BundleId;
+                cart.Add(newCartItem); //Add new cart item to our cart
+                _cache.Set("Cart", cart); //Set our cart to be the new cart
+                return RedirectToAction("GetCustomerStoreInventory");
+            }
         }
 
         /// <summary>
@@ -449,6 +492,7 @@ namespace SlaughtoriaGamesP1.Controllers
             cart = (List<OrderInformation>)itemCart;
             if (cart.Count == 0)
             {
+                //TODO Return alert for an empty cart 
                 _logger.LogInformation("Cart was empty");
                 return RedirectToAction("GetCustomerStoreInventory");
             }
@@ -463,45 +507,47 @@ namespace SlaughtoriaGamesP1.Controllers
         /// </summary>
         /// <param name="cartItem"></param>
         /// <param name="newNum"></param>
-        public void EditCartItem(OrderInformation cartItem, int newNum)
+        public IActionResult EditCartItem(OrderInformation cartItem)
         {
             //Void because we are just editing our cart list
 
             //TODO Add a check to make sure new quantity isnt more than whats available
+            //TODO Finish the editting functionality 
             var itemCart = _cache.Get("Cart");
             List<OrderInformation> cart = new List<OrderInformation>();
             cart = (List<OrderInformation>)itemCart;
             //Select the item from our cart that needs to be edited and edit 
-            var edit = (from OrderInformation in cart
-                        where cartItem.OrderedProduct == OrderInformation.OrderedProduct
-                        select OrderInformation
-                        ).FirstOrDefault();
-            edit.OrderedProductAmount = newNum;
+            var edit = StoreMethods.ManipulateCartItem(cartItem, cart);
+
+            //Update the items ordered amount and total unit price 
+            edit.OrderedProductAmount = cartItem.OrderedProductAmount;
+            edit.UnitPrice = edit.OrderedProductAmount * (edit.UnitPrice * (1 - edit.ProductDiscount));
             _cache.Set("Cart", cart);
+            return RedirectToAction("GetCustomerStoreInventory");
         }
 
         /// <summary>
         /// Deletes item from cart
         /// </summary>
         /// <param name="cartItem"></param>
-        public void DeleteCartItem(OrderInformation cartItem)
+        public IActionResult DeleteCartItem(OrderInformation cartItem)
         {
             var itemCart = _cache.Get("Cart");
             List<OrderInformation> cart = new List<OrderInformation>();
             cart = (List<OrderInformation>)itemCart;
-            //Void because we are just editing our cart list
-            var delete = (from OrderInformation in cart
-                        where cartItem.OrderedProduct == OrderInformation.OrderedProduct
-                        select OrderInformation
-                       ).FirstOrDefault();
+
+            //Select item to be deleted
+            var delete = StoreMethods.ManipulateCartItem(cartItem, cart);
+
             cart.Remove(delete);
             _cache.Set("Cart", cart);
+            return RedirectToAction("GetCustomerStoreInventory");
         }
 
         /// <summary>
         /// Creates a new order item, calculates order total and updates inventory
         /// </summary>
-        public IActionResult Checkout(List<OrderInformation> Cart)
+        public IActionResult Checkout()
         {
             //Takes our Cart, creates a new order item, calculates orderTotal, and updates the inventory 
 
@@ -509,27 +555,16 @@ namespace SlaughtoriaGamesP1.Controllers
             var loggedIn = _cache.Get("loggedInCustomer");
             loggedInCustomer = (Customers)loggedIn;
 
-            //Create a new orderID to group all the ordered items together 
-            int newOrderId = 1;
-            int orderIdFound = 0;
-            var orderList = (from Orders in _db.Orders
-                             select Orders.OrderId);
-            if (_db.Orders.ToList().Count != 0) //If there is orders, create new orderID, if this is first order, OrderId=1
-            {
-                do
-                {
-                    if (orderList.Contains(newOrderId))
-                    {
-                        newOrderId++;
-                    }
-                    else
-                    {
-                        orderIdFound = 1;
-                    }
-                } while (orderIdFound != 1);
-            }
+            //Retrieve the cart contents 
+            var itemCart = _cache.Get("Cart");
+            List<OrderInformation> cart = new List<OrderInformation>();
+            cart = (List<OrderInformation>)itemCart;
 
-            if (Cart.Count == 0)
+            //Get new order id 
+            var orderList = StoreMethods.GetAllOrderIds(_db);
+            int newOrderId = StoreMethods.GetNewOrderId(orderList);
+            
+            if (cart.Count == 0)
             {
                 _logger.LogInformation("Cart was empty");
                 return RedirectToAction("GetCustomerStoreInventory");
@@ -538,39 +573,53 @@ namespace SlaughtoriaGamesP1.Controllers
             {
                 _logger.LogInformation("Cart had items, beginning checkout...");
                 decimal orderTotal = 0;
-                foreach(var product in Cart)
+                foreach(var product in cart)
                 {
                     //Update the item quantities 
-                    var allItemsInventory = (from Products in _db.Products
-                                             select Products).ToList(); //Gets all the existing products
+                    var allItemsInventory = StoreMethods.GetAllProducts(_db);
+
                     var storeInventory = (from Inventory in _db.Inventory
                                           where Inventory.StoreInventory == loggedInCustomer.DefaultStore
-                                          select Inventory).ToList(); //Gets only the user's default store's inventory
-
-                    foreach (var Inventory in storeInventory) //Update the ordered product's quantity
+                                          select new { Inventory.InventoryId,
+                                                        Inventory.ItemInInventory, 
+                                                        Inventory.StoreInventory, 
+                                                        Inventory.ProductCurrentQuantity }).ToList(); //Gets only the user's default store's inventory
+                    //var allInventories = (from Inventory in _db.Inventory
+                    //                      select new
+                    //                      {
+                    //                          Inventory.InventoryId,
+                    //                          Inventory.ItemInInventory,
+                    //                          Inventory.StoreInventory,
+                    //                          Inventory.ProductCurrentQuantity
+                    //                      }).ToList();
+                    foreach (var Inventory in _db.Inventory) //Update the ordered product's quantity
                     {
-                        if (Inventory.ItemInInventory == product.OrderedProduct && Inventory.StoreInventory == loggedInCustomer.DefaultStore)
+                        foreach(var storeInv in storeInventory)
                         {
-                            Inventory.ProductCurrentQuantity -= product.OrderedProductAmount; //New quantity set for ordered product
-                            _logger.LogInformation($"\tDEBUG: {product.ProductName} quantity decreased by {product.OrderedProductAmount} to {Inventory.ProductCurrentQuantity}\n");
-
+                            if (storeInv.StoreInventory == Inventory.StoreInventory && Inventory.ItemInInventory == product.OrderedProduct && Inventory.StoreInventory == loggedInCustomer.DefaultStore)
+                            {
+                                int newQuantity = storeInv.ProductCurrentQuantity - product.OrderedProductAmount;
+                                Inventory.ProductCurrentQuantity = newQuantity; //New quantity set for ordered product
+                                _logger.LogInformation($"Amount decremented");
+                                
+                            }
+                            else
+                            {
+                                continue;
+                            }
                         }
-                        else
-                        {
-                            continue;
-                        }
-
+                        
                     }
-                    if (product.IsBundle == true) //if the ordered product is a bundle 
+                    if (product.IsBundle == true) //if the ordered product is a bundle, update associated items
                     {
                         foreach (var inventory in _db.Inventory)
                         {
                             foreach (var items in allItemsInventory)
                             {
-                                if (items.BundleId == product.BundleId && inventory.ItemInInventory == items.Skunum && items.IsInBundle == true) //if the item is InBundle, is part of the orderedProduct's bundle, and available at the same store
+                                if (items.BundleId == product.BundleId && inventory.ItemInInventory == items.Skunum && items.IsInBundle == true && inventory.StoreInventory == loggedInCustomer.DefaultStore) //if the item is InBundle, is part of the orderedProduct's bundle, and available at the same store
                                 {
                                     inventory.ProductCurrentQuantity -= product.OrderedProductAmount; //Decrement items that are a part of the bundle as well
-                                    _logger.LogInformation($"\tDEBUG: Bundle-Included item '{items.ProductName}' in Bundle #{items.BundleId} quantity reduced by {product.OrderedProductAmount} to {inventory.ProductCurrentQuantity}\n");
+                                    _logger.LogInformation("Bundle included item decremented");
                                 }
                                 else
                                 {
@@ -579,13 +628,13 @@ namespace SlaughtoriaGamesP1.Controllers
                             }
                         }
                     }
-
+                    _db.SaveChanges();
                     //Because the 'unit price' of each item is calculated with ordered# and discount, just add item totals
                     orderTotal += product.UnitPrice;
                     orderTotal = Math.Round(orderTotal, 2); //2 decimal points
                 }
                 //Need a uniform order total, so we need another foreach loop
-                foreach(var product in Cart)
+                foreach(var product in cart)
                 {
                     Orders newOrder = new Orders();
                     newOrder.OrderDate = DateTime.Now;
@@ -598,14 +647,25 @@ namespace SlaughtoriaGamesP1.Controllers
                     _db.Orders.Add(newOrder);
                     _db.SaveChanges();
                 }
-                return View("_Checkout", Cart);
+                //Empty out the cart, set the cache's cart to be the new empty cart, then return the checkout screen
+                List<OrderInformation> emptyCart = new List<OrderInformation>();
+                List<OrderInformation> checkoutCart = new List<OrderInformation>();
+                foreach(var item in cart)
+                {
+                    OrderInformation purchased = new OrderInformation();
+                    purchased = item;
+                    purchased.OrderDate = DateTime.Now;
+                    purchased.OrderTotal = orderTotal;
+                    checkoutCart.Add(purchased);
+                }
+                _cache.Set("Cart", emptyCart);
+                return View("_Checkout", checkoutCart );
             }
-            
         }
 
-        public IActionResult _Checkout(List<OrderInformation> order)
+        public IActionResult _Checkout(List<OrderInformation> cart)
         {
-            return View(order);
+            return View(cart);
         }
     }
 

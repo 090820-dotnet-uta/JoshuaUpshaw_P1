@@ -147,7 +147,6 @@ C:\Users\NeonJ\source\repos\SlaughtoriaGamesP1\bin\Debug\netcoreapp3.1\ru\Micros
 C:\Users\NeonJ\source\repos\SlaughtoriaGamesP1\bin\Debug\netcoreapp3.1\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\NeonJ\source\repos\SlaughtoriaGamesP1\bin\Debug\netcoreapp3.1\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\NeonJ\source\repos\SlaughtoriaGamesP1\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
-C:\Users\NeonJ\source\repos\SlaughtoriaGamesP1\obj\Debug\netcoreapp3.1\Razor\Views\Customers\_Login.cshtml.g.cs
 C:\Users\NeonJ\source\repos\SlaughtoriaGamesP1\obj\Debug\netcoreapp3.1\Razor\Views\Customers\_SignUpCustomer.cshtml.g.cs
 C:\Users\NeonJ\source\repos\SlaughtoriaGamesP1\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_StoreMenu.cshtml.g.cs
 C:\Users\NeonJ\source\repos\SlaughtoriaGamesP1\obj\Debug\netcoreapp3.1\Razor\Views\Stores\_SelectDefaultStore.cshtml.g.cs
@@ -160,3 +159,4 @@ C:\Users\NeonJ\source\repos\SlaughtoriaGamesP1\obj\Debug\netcoreapp3.1\Razor\Vie
 C:\Users\NeonJ\source\repos\SlaughtoriaGamesP1\obj\Debug\netcoreapp3.1\Razor\Views\Stores\_CheckCart.cshtml.g.cs
 C:\Users\NeonJ\source\repos\SlaughtoriaGamesP1\obj\Debug\netcoreapp3.1\Razor\Views\Stores\_Checkout.cshtml.g.cs
 C:\Users\NeonJ\source\repos\SlaughtoriaGamesP1\obj\Debug\netcoreapp3.1\Razor\Views\Stores\_SelectItem.cshtml.g.cs
+C:\Users\NeonJ\source\repos\SlaughtoriaGamesP1\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Login.cshtml.g.cs

@@ -30,5 +30,6 @@ namespace SlaughtoriaGamesP1.Models
         public bool IsInBundle { get; set; }
         public bool IsBundle { get; set; }
         public int BundleId { get; set; }
+        public int OrderedAmt { get; set; } = 1;
     }
 }

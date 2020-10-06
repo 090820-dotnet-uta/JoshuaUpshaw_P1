@@ -17,11 +17,11 @@ namespace SlaughtoriaGamesP1.Data
 
         }
 
-        public DbSet<Customers> Customers { get; set; }
-        public DbSet<Stores> Stores { get; set; }
-        public DbSet<Products> Products{ get;set; }
-        public DbSet<Orders> Orders { get; set; }
-        public DbSet<Inventory> Inventory { get; set; }
-        public DbSet<SlaughtoriaGamesP1.Models.InventoryProductInfo> InventoryProductInfo { get; set; }
+        public virtual DbSet<Customers> Customers { get; set; }
+        public virtual DbSet<Stores> Stores { get; set; }
+        public virtual DbSet<Products> Products{ get;set; }
+        public virtual DbSet<Orders> Orders { get; set; }
+        public virtual DbSet<Inventory> Inventory { get; set; }
+        public virtual DbSet<SlaughtoriaGamesP1.Models.InventoryProductInfo> InventoryProductInfo { get; set; }
     }
 }

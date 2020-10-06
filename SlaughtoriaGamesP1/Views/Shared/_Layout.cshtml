@@ -53,7 +53,7 @@
         <header>
             <nav class="navbar navbar-toggleable-lg navbar-dark bg-dark box-shadow mb-3">
                 <div class="container">
-                    <a class="navbar-brand" id="shadowAni" asp-area="" asp-controller="Customers" asp-action="Login">
+                    <a class="navbar-brand" id="shadowAni" asp-area="" asp-controller="Shared" asp-action="_Login">
                         <img src="~/Icon_corruption_vmp.png" width="30" height="30" class="d-inline-block align-top" alt="Icon" loading="lazy">
                         Slaughtoria Games
                     </a>
@@ -64,15 +64,33 @@
                     <div class="collapse navbar-collapse" id="navbar">
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-                                <img src ="~/Icon_corruption_chs.png"> 
-                                Home
+                                <a class="nav-link" asp-area="" asp-controller="Stores" asp-action="GetCustomerStoreInventory">
+                                    <img src="~/Icon_corruption_chs.png">
+                                    Place an Order
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">
+                                <a class="nav-link" asp-area="" asp-controller="Stores" asp-action="_GetOrderHistorySelection">
                                     <img src="~/Icon_corruption_chs.png">
-                                Privacy
+                                    Order History
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Stores" asp-action="_GetStoreInventory">
+                                    <img src="~/Icon_corruption_chs.png">
+                                    Check Store Inventory
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Stores" asp-action="_SelectDefaultStore">
+                                    <img src="~/Icon_corruption_chs.png">
+                                    Store Select
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Customers" asp-action="Logout">
+                                    <img src="~/Icon_corruption_chs.png">
+                                    Logout
                                 </a>
                             </li>
                             <li>

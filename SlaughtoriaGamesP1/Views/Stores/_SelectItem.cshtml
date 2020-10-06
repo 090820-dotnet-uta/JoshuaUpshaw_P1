@@ -1,6 +1,35 @@
-﻿@model SlaughtoriaGamesP1.Models.InventoryProductSelect
+﻿@model IEnumerable<SlaughtoriaGamesP1.Models.InventoryProductInfo>
 
 <style>
+    body {
+        background-image: url(https://media.playstation.com/is/image/SCEA/playstation-wallpapers_ghost-of-tsushima-keyart-4K-01-ps4-26jun20-en-us?$native_nt$);
+        background-repeat: no-repeat;
+        background-position: top;
+        background-size: cover;
+        height: 100vh;
+        padding: 0;
+        margin: 0;
+    }
+
+    table{
+        border: 3px inset #941812;
+        background-color: #DADBD9;
+    }
+
+    th, thead {
+        border: 3px inset #941812;
+        text-align: center;
+        font-size: medium;
+        padding: 5px;
+
+    }
+
+    td {
+        border: 3px inset #941812;
+        text-align: center;
+        font-size: medium;
+        padding: 5px;
+    }
 
     /* Dropdown Button */
     .btnDrop {
@@ -12,10 +41,10 @@
         cursor: pointer;
     }
 
-        /* Dropdown button on hover & focus */
-        .btnDrop:hover, .btnDrop:focus {
-            background-color: #2980B9;
-        }
+    /* Dropdown button on hover & focus */
+    .btnDrop:hover, .btnDrop:focus {
+        background-color: #2980B9;
+    }
 
     /* The container <div> - needed to position the dropdown content */
     .dDown {
@@ -50,75 +79,153 @@
     .showdrop {
         display: block;
     }
+
+    a{
+        text-decoration: none;
+        color: black;
+    }
+
+    a:hover{
+        text-decoration: none;
+        color: black;
+    }
+
+    .button{
+        border: 3px outset #941812;
+        border-radius: 20px;
+        text-decoration: none;
+        color: black;
+        padding: 7px;
+        background-color:#DADBD9;
+    }
+
+    .button:hover{
+        border: 3px inset #941812;
+    }
+
+    .salebox{
+        border: 3px inset #941812;
+        border-radius: 20px;
+        width: 100%;
+        align-self: center;
+        background-color: #DADBD9;
+    }
+
+    .sale {
+        background-color: #DADBD9;
+        color: black;
+        text-shadow: 3px 3px 3px #941812;
+        border: 3px inset #941812;
+        border-radius: 20px;
+        font-size: x-large;
+        font-weight: 600;
+        padding: 5px;
+        margin: 5px;
+        text-align: center;
+    }
+
+    .contain {
+        display: inline-flex;
+        flex-wrap: wrap;
+        overflow: scroll;
+        overflow-x: hidden;
+        justify-content: center;
+        max-height: 500px;
+    }
+
 </style>
 <p>
     Displaying items being sold at your default store...
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                ProductName
-            </th>
-            <th>
-                Product Description
-            </th>
-            <th>
-                Unit Price
-            </th>
-            <th>
-                Product Current Quantity
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.inventoryitem)
-        {
+<div class="contain">
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProductName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProductDescrip)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UnitPrice)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProductCurrentQuantity)
-                </td>
-
-                <td>
-                    <a>@Html.ActionLink("Add item to cart", "AddItemToCart", "Stores", item)</a>
-                    @*<div class="dDown">
-                        <button onclick="storeDropdown()" class="btnDrop">Add</button>
-                        <div id="dropCon" class="dDown-content hidedrop">
-                            <form asp-action="AddItemToCart">
-                                <input type="number" name="ordered" value="1" min="1" max="@Html.DisplayFor(modelItem=> item.ProductCurrentQuantity)" asp-for="NumberOrdered" />
-                                <input type="submit" asp-for="selectedItem" />
-                            </form>
-
-                        </div>
-                    </div>*@
-                </td>
+                <th>
+                    Product Name
+                </th>
+                <th>
+                    Product Description
+                </th>
+                <th>
+                    Unit Price
+                </th>
+                <th>
+                    Current Quantity
+                </th>
+                <th></th>
             </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductDescrip)
+                    </td>
+                    <td>
+                        $@Html.DisplayFor(modelItem => item.UnitPrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductCurrentQuantity)
+                    </td>
+
+                    <td>
+                        <a>@Html.ActionLink("Add item to cart", "AddItemToCart", "Stores", item)</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="salebox">
+        @foreach (var item in Model)
+        {
+            @if (item.ProductDiscount != 0)
+            {
+                decimal discount = item.ProductDiscount;
+                item.ProductDiscount = Math.Round((discount * 100), 0);
+
+                <div class="sale">
+                    @Html.DisplayFor(modelItem => item.ProductName)<span> is on sale for </span>@Html.ValueFor(modelItem => item.ProductDiscount)<span>% off!</span>
+                </div>
+
+
+            }
         }
-    </tbody>
-</table>
-@foreach (var item in Model.inventoryitem)
-{
-    @if (item.ProductDiscount != 0)
-    {
-        decimal discount = item.ProductDiscount;
-        item.ProductDiscount = Math.Round((discount * 100), 0);
+    </div>
+</div>
 
-        @Html.DisplayFor(modelItem => item.ProductName)<span> is on sale for </span>@Html.ValueFor(modelItem => item.ProductDiscount)<span>% off!</span>
 
-    }
-}
 
-<a asp-area="" asp-action="_CheckCart" asp-controller="Stores">Check Cart</a>
+<div class="container justify-content-center">
+    <div>
+        <button class="button">
+            <a asp-action="_CheckCart" asp-controller="Stores">
+                Check Cart
+            </a>
+        </button>
+    </div>
+    <div >
+        <button class="button">
+            <a asp-area="" asp-action="Checkout" asp-controller="Stores">
+                Checkout
+            </a>
+        </button>
+    </div>
+    <div>
+        <button class="button">
+            <a asp-area="" asp-controller="Stores" asp-action="_StoreMenu">
+                Return to store menu
+            </a>
+        </button>
+    </div>
+</div>
+
+
+
 
 <script>
 

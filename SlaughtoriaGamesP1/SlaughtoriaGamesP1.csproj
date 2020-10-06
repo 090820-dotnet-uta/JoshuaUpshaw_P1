@@ -5,8 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="Views\Stores\tsushima2.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\final_5f73cbbdea3ea600562fb17e_856566.mp4" />
-    <None Include="wwwroot\oie_xoIVhDClBSZs.gif" />
     <None Include="wwwroot\skavenbkg.gif" />
   </ItemGroup>
 

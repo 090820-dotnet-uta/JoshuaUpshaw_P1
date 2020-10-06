@@ -55,32 +55,67 @@ namespace SlaughtoriaGamesP1.Controllers
         [HttpPost]
         public IActionResult SignUpCustomer([Bind("FirstName,LastName,UserName,Pword, City, State, Street, Zip, AptNum, DefaultStore")] Customers customer)
         {
-            int newId = 0;
-            int newIdFound = 0;
-            var custId = (from Customers in _db.Customers
-                          select Customers.CustomerId).ToList();
-
-            //Find the highest CustomerID and increment by 1
-            foreach(var custID in custId)
+            foreach(var cust in _db.Customers)
             {
-                do
+                if(customer.UserName == cust.UserName)
                 {
-                    if(custId.Contains(newId))
-                    {
-                        newId++;
-                    }
-                    else
-                    {
-                        newIdFound++;
-                        customer.CustomerId = newId;
-                    }
-                } while (newIdFound == 0);
+                    ModelState.AddModelError("Username", "Username is taken");
+                    return View("_SignUpCustomer");
+                }
             }
-            _cache.Set("loggedInCustomer", customer); //Add as currentlylogged in for future use
-            _db.Customers.Add(customer);    //Add the new customer to the db
-            _db.SaveChanges();
+            if(customer.FirstName.Length == 0)
+            {
+                ModelState.AddModelError("FirstName", "Entry can't be empty");
+                return View("_SignUpCustomer");
+            }
+            else if (customer.LastName.Length == 0)
+            {
+                ModelState.AddModelError("LastName", "Entry can't be empty");
+                return View("_SignUpCustomer");
+            }
+            else if (customer.UserName.Length == 0)
+            {
+                ModelState.AddModelError("UserName", "Entry can't be empty");
+                return View("_SignUpCustomer");
+            }
+            else if (customer.Pword.Length == 0)
+            {
+                ModelState.AddModelError("Pword", "Entry can't be empty");
+                return View("_SignUpCustomer");
+            }
+            else if (customer.City.Length == 0)
+            {
+                ModelState.AddModelError("City", "Entry can't be empty");
+                return View("_SignUpCustomer");
+            }
+            else if (customer.State.Length == 0)
+            {
+                ModelState.AddModelError("State", "Entry can't be empty");
+                return View("_SignUpCustomer");
+            }
+            else if (customer.Street.Length == 0)
+            {
+                ModelState.AddModelError("Street", "Entry can't be empty");
+                return View("_SignUpCustomer");
+            }
+            else if (customer.Zip <= 0 || customer.Zip > 99999 )
+            {
+                ModelState.AddModelError("Zip", "Invalid entry");
+                return View("_SignUpCustomer");
+            }
+            else
+            {
+                 _cache.Set("loggedInCustomer", customer); //Add as currentlylogged in for future use
+                _db.Customers.Add(customer);    //Add the new customer to the db
+                _db.SaveChanges();
 
-            return View("_StoreMenu");
+                return View("_StoreMenu");
+            }
+
+            //var custId = StoreMethods.GetCustomerIDs(_db);
+            //customer.CustomerId = StoreMethods.GetNewCustID(custId);
+
+           
         }
 
         /// <summary>
@@ -103,8 +138,8 @@ namespace SlaughtoriaGamesP1.Controllers
         {
             int passFound = 0;
             int userFound = 0;
-            var custLoginInfo = (from Customers in _db.Customers
-                                 select Customers).ToList();
+            var custLoginInfo = StoreMethods.GetCustomers(_db);
+
             foreach(var customer in custLoginInfo) //Check to make sure valid login info
             {
                 if(UserName == customer.UserName) //entered user name corresponds to existing username for logged in user
@@ -141,13 +176,10 @@ namespace SlaughtoriaGamesP1.Controllers
         public IActionResult _ListSearchResults(string name)
         {
             //TODO Add an alert if the search results are EMPTY (no matches)
-            name = name.ToUpper(); //Search not case sensitive 
 
             //Find all the matches, order by last name 
-            var result = (from Customers in _db.Customers
-                          where Customers.LastName.ToUpper() == name || Customers.LastName.ToUpper().Contains(name)
-                          orderby Customers.LastName descending
-                          select Customers).ToList();
+            var result = StoreMethods.GetSearchResults(name, _db);
+
             if(result.Count == 0)
             {
                 _logger.LogInformation("No results were found");
@@ -158,6 +190,17 @@ namespace SlaughtoriaGamesP1.Controllers
                 _logger.LogInformation("Results were found");
                 return View(result);
             }
+        }
+
+        /// <summary>
+        /// Empties the cache, removes logged in customer
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Logout()
+        {
+            StoreMethods.LogoutCache(_cache);
+            _logger.LogInformation("User logged out");
+            return View("_Login");
         }
 
         // POST: CustomersController/Create
