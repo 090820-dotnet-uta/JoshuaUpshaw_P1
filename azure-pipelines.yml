@@ -48,7 +48,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
-    projects: './P1/P1.csproj'
+    projects: './SlaughtoriaGamesP1/SlaughtoriaGamesP1.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
 # - task: VSBuild@1
