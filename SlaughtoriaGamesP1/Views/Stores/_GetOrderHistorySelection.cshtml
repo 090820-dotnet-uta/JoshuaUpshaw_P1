@@ -210,9 +210,8 @@
     </div>
 
 </body>
-<button class="back">
-    <a> @Html.ActionLink("Return to store menu", "_StoreMenu", "Shared")</a>
-</button>
+<button class="back" onclick="window.history.back()">Return to previous page</button>
+
 <script>
     var mydroplist = document.querySelector("#dropCon");
     console.log(mydroplist);

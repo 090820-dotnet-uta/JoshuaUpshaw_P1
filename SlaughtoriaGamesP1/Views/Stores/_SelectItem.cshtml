@@ -80,15 +80,6 @@
         display: block;
     }
 
-    a{
-        text-decoration: none;
-        color: black;
-    }
-
-    a:hover{
-        text-decoration: none;
-        color: black;
-    }
 
     .button{
         border: 3px outset #941812;
@@ -97,6 +88,7 @@
         color: black;
         padding: 7px;
         background-color:#DADBD9;
+        text-align: center;
     }
 
     .button:hover{
@@ -104,17 +96,20 @@
     }
 
     .salebox{
+        -webkit-animation: rainbow 2s alternate-reverse infinite;
+        -webkit-animation-delay: 1s;
         border: 3px inset #941812;
         border-radius: 20px;
-        width: 100%;
         align-self: center;
         background-color: #DADBD9;
+        
     }
 
     .sale {
+        -webkit-animation: rainbow 3s infinite alternate-reverse;
         background-color: #DADBD9;
         color: black;
-        text-shadow: 3px 3px 3px #941812;
+        text-shadow: 3px 3px 3px #DADBD9;
         border: 3px inset #941812;
         border-radius: 20px;
         font-size: x-large;
@@ -124,6 +119,36 @@
         text-align: center;
     }
 
+    @@-webkit-keyframes rainbow{
+        15% {
+            background-color: red;
+        }
+
+        30% {
+            background-color: orangered;
+        }
+
+        45% {
+            background-color: yellow;
+        }
+
+        60% {
+            background-color: green;
+        }
+
+        75% {
+            background-color: blue;
+        }
+
+        90% {
+            background-color: indigo;
+        }
+
+        100% {
+            background-color: violet;
+        }
+    }
+
     .contain {
         display: inline-flex;
         flex-wrap: wrap;
@@ -131,6 +156,26 @@
         overflow-x: hidden;
         justify-content: center;
         max-height: 500px;
+    }
+
+    .contained {
+        display: flex;
+        align-content: center;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+    }
+
+    a.Add{
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    a.Add:hover{
+        color: #941812;
+        text-shadow: 4px 4px 4px black;
+        text-decoration: underline;
     }
 
 </style>
@@ -174,7 +219,7 @@
                     </td>
 
                     <td>
-                        <a>@Html.ActionLink("Add item to cart", "AddItemToCart", "Stores", item)</a>
+                        <a class="Add">@Html.ActionLink("Add", "AddItemToCart", "Stores", item)</a>
                     </td>
                 </tr>
             }
@@ -200,10 +245,10 @@
 
 
 
-<div class="container justify-content-center">
+<div class="contained">
     <div>
         <button class="button">
-            <a asp-action="_CheckCart" asp-controller="Stores">
+            <a asp-area="" asp-action="_CheckCart" asp-controller="Stores">
                 Check Cart
             </a>
         </button>
@@ -265,4 +310,6 @@
             }
         }
     }
+
+
 </script>

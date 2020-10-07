@@ -63,37 +63,37 @@ namespace SlaughtoriaGamesP1.Controllers
                     return View("_SignUpCustomer");
                 }
             }
-            if(customer.FirstName.Length == 0)
+            if(customer.FirstName == null)
             {
                 ModelState.AddModelError("FirstName", "Entry can't be empty");
                 return View("_SignUpCustomer");
             }
-            else if (customer.LastName.Length == 0)
+            else if (customer.LastName == null)
             {
                 ModelState.AddModelError("LastName", "Entry can't be empty");
                 return View("_SignUpCustomer");
             }
-            else if (customer.UserName.Length == 0)
+            else if (customer.UserName == null)
             {
                 ModelState.AddModelError("UserName", "Entry can't be empty");
                 return View("_SignUpCustomer");
             }
-            else if (customer.Pword.Length == 0)
+            else if (customer.Pword == null)
             {
                 ModelState.AddModelError("Pword", "Entry can't be empty");
                 return View("_SignUpCustomer");
             }
-            else if (customer.City.Length == 0)
+            else if (customer.City == null)
             {
                 ModelState.AddModelError("City", "Entry can't be empty");
                 return View("_SignUpCustomer");
             }
-            else if (customer.State.Length == 0)
+            else if (customer.State == null)
             {
                 ModelState.AddModelError("State", "Entry can't be empty");
                 return View("_SignUpCustomer");
             }
-            else if (customer.Street.Length == 0)
+            else if (customer.Street == null)
             {
                 ModelState.AddModelError("Street", "Entry can't be empty");
                 return View("_SignUpCustomer");

@@ -426,8 +426,16 @@ namespace SlaughtoriaGamesP1.Controllers
         /// Adds item to cart when user clicks button
         /// </summary>
         /// <returns></returns>
-        public IActionResult AddItemToCart(InventoryProductInfo selectedItem, int numOrdered = 1)
+        public IActionResult AddItemToCart(InventoryProductInfo selectedItem, int? numOrdered)
         {
+            if(numOrdered == null)
+            {
+                numOrdered = (int)1;
+            }
+            else
+            {
+                numOrdered = (int)numOrdered;
+            }
             //TODO Add a check to make sure quantity isnt more than whats available
 
             //Not returning anything, just altering the cart list 
@@ -467,9 +475,9 @@ namespace SlaughtoriaGamesP1.Controllers
             {
                 OrderInformation newCartItem = new OrderInformation();
                 newCartItem.OrderedProduct = selectedItem.Skunum;
-                newCartItem.OrderedProductAmount = numOrdered;
+                newCartItem.OrderedProductAmount = (int)numOrdered;
                 newCartItem.ProductName = selectedItem.ProductName;
-                newCartItem.UnitPrice = numOrdered * (selectedItem.UnitPrice*(1-selectedItem.ProductDiscount)); //Total price of that item given the discount and num ordered
+                newCartItem.UnitPrice = (int)numOrdered * (selectedItem.UnitPrice*(1-selectedItem.ProductDiscount)); //Total price of that item given the discount and num ordered
                 newCartItem.WhoOrdered = loggedInCustomer.CustomerId;
                 newCartItem.StoreOrderedFrom = loggedInCustomer.DefaultStore;
                 newCartItem.IsBundle = selectedItem.IsBundle;
@@ -490,16 +498,10 @@ namespace SlaughtoriaGamesP1.Controllers
             var itemCart = _cache.Get("Cart");
             List<OrderInformation> cart = new List<OrderInformation>();
             cart = (List<OrderInformation>)itemCart;
-            if (cart.Count == 0)
-            {
-                //TODO Return alert for an empty cart 
-                _logger.LogInformation("Cart was empty");
-                return RedirectToAction("GetCustomerStoreInventory");
-            }
-            else
-            {
-                return View(cart);
-            }
+            
+            EditCart Kart = new EditCart();
+            Kart.Cart = cart;
+                return View(Kart);
         }
 
         /// <summary>
@@ -507,23 +509,33 @@ namespace SlaughtoriaGamesP1.Controllers
         /// </summary>
         /// <param name="cartItem"></param>
         /// <param name="newNum"></param>
-        public IActionResult EditCartItem(OrderInformation cartItem)
+        public IActionResult EditCartItem(EditCart editCart)
         {
-            //Void because we are just editing our cart list
-
+            
+            int newAmt = editCart.OrderNum;
+            var itemQuantity = (from Inventory in _db.Inventory
+                                where Inventory.StoreInventory == editCart.storeId && Inventory.ItemInInventory == editCart.itemId
+                                select Inventory.ProductCurrentQuantity).FirstOrDefault();
+            if(newAmt > itemQuantity)
+            {
+                ModelState.AddModelError("newAmt", "Input is too large!");
+                return View("_Checkcart");
+            }
             //TODO Add a check to make sure new quantity isnt more than whats available
             //TODO Finish the editting functionality 
             var itemCart = _cache.Get("Cart");
             List<OrderInformation> cart = new List<OrderInformation>();
             cart = (List<OrderInformation>)itemCart;
+
             //Select the item from our cart that needs to be edited and edit 
-            var edit = StoreMethods.ManipulateCartItem(cartItem, cart);
+            OrderInformation edit = new OrderInformation();
+            edit = StoreMethods.ManipulateCartItem(editCart.itemId, cart);
 
             //Update the items ordered amount and total unit price 
-            edit.OrderedProductAmount = cartItem.OrderedProductAmount;
+            edit.OrderedProductAmount = newAmt;
             edit.UnitPrice = edit.OrderedProductAmount * (edit.UnitPrice * (1 - edit.ProductDiscount));
             _cache.Set("Cart", cart);
-            return RedirectToAction("GetCustomerStoreInventory");
+            return RedirectToAction("_CheckCart");
         }
 
         /// <summary>
@@ -537,7 +549,7 @@ namespace SlaughtoriaGamesP1.Controllers
             cart = (List<OrderInformation>)itemCart;
 
             //Select item to be deleted
-            var delete = StoreMethods.ManipulateCartItem(cartItem, cart);
+            var delete = StoreMethods.ManipulateCartItem(cartItem.OrderedProduct, cart);
 
             cart.Remove(delete);
             _cache.Set("Cart", cart);
@@ -567,7 +579,7 @@ namespace SlaughtoriaGamesP1.Controllers
             if (cart.Count == 0)
             {
                 _logger.LogInformation("Cart was empty");
-                return RedirectToAction("GetCustomerStoreInventory");
+                return View("_Checkout");
             }
             else //Begin checkout 
             {
@@ -579,7 +591,7 @@ namespace SlaughtoriaGamesP1.Controllers
                     var allItemsInventory = StoreMethods.GetAllProducts(_db);
 
                     var storeInventory = (from Inventory in _db.Inventory
-                                          where Inventory.StoreInventory == loggedInCustomer.DefaultStore
+                                          where Inventory.StoreInventory == loggedInCustomer.DefaultStore && Inventory.ItemInInventory == product.OrderedProduct
                                           select new { Inventory.InventoryId,
                                                         Inventory.ItemInInventory, 
                                                         Inventory.StoreInventory, 
@@ -596,20 +608,15 @@ namespace SlaughtoriaGamesP1.Controllers
                     {
                         foreach(var storeInv in storeInventory)
                         {
-                            if (storeInv.StoreInventory == Inventory.StoreInventory && Inventory.ItemInInventory == product.OrderedProduct && Inventory.StoreInventory == loggedInCustomer.DefaultStore)
+                            if (storeInv.StoreInventory == Inventory.StoreInventory && Inventory.ItemInInventory == product.OrderedProduct)
                             {
-                                int newQuantity = storeInv.ProductCurrentQuantity - product.OrderedProductAmount;
-                                Inventory.ProductCurrentQuantity = newQuantity; //New quantity set for ordered product
+                                Inventory.ProductCurrentQuantity -= product.OrderedProductAmount; //New quantity set for ordered product
                                 _logger.LogInformation($"Amount decremented");
                                 
                             }
-                            else
-                            {
-                                continue;
-                            }
                         }
-                        
                     }
+                    _db.SaveChanges();
                     if (product.IsBundle == true) //if the ordered product is a bundle, update associated items
                     {
                         foreach (var inventory in _db.Inventory)
@@ -620,10 +627,6 @@ namespace SlaughtoriaGamesP1.Controllers
                                 {
                                     inventory.ProductCurrentQuantity -= product.OrderedProductAmount; //Decrement items that are a part of the bundle as well
                                     _logger.LogInformation("Bundle included item decremented");
-                                }
-                                else
-                                {
-                                    continue;
                                 }
                             }
                         }

@@ -1,59 +1,281 @@
 ﻿@model IEnumerable<SlaughtoriaGamesP1.Models.OrderInformation>
 
-<h1>
-    Thank you for your purchase!
-</h1>
-
-<div>
-    You have ordered the following items...
-    @foreach (var item in Model)
-    {
-        <div>
-            Ordered Product:
-            @Html.DisplayFor(modelItem => item.ProductName)
-        </div>
-        <div>
-            SKU #
-            @Html.DisplayFor(modelItem => item.OrderedProduct)
-        </div>
-        <div>
-            Quantity:
-            @Html.DisplayFor(modelItem => item.OrderedProductAmount)
-        </div>
+<style>
+    body {
+        background-image: url(https://media.playstation.com/is/image/SCEA/playstation-wallpapers_ghost-of-tsushima-keyart-4K-01-ps4-26jun20-en-us?$native_nt$);
+        background-repeat: no-repeat;
+        background-position: top;
+        background-size: cover;
+        height: 100vh;
+        padding: 0;
+        margin: 0;
     }
-    <div>
-        Order total: $
-        @for (int i = 1; i == (Model.Count() - (Model.Count() - 1)); i++)
-        {
-            foreach (var item in Model)
-            {
 
-                @Html.DisplayFor(modelItem => item.OrderTotal)
-                i++;
-                if(i>1)
-                {
-                    break;
-                }
-            }
-        }
-    </div>
-    <div>
-        Order Date:
-        @for (int i = 1; i == (Model.Count() - (Model.Count() - 1)); i++)
-        {
-            foreach (var item in Model)
-            {
+    a {
+        text-decoration: none;
+        color: black;
+    }
 
-                @Html.DisplayFor(modeilItem => item.OrderDate)
-                i++;
-                if(i>1)
-                {
-                    break;
-                }
-            }
-        }
-    </div>
+    a:hover {
+        text-decoration: none;
+        color: black;
+    }
+
+    .button {
+        border: 3px outset #941812;
+        border-radius: 20px;
+        text-decoration: none;
+        color: black;
+        padding: 7px;
+        background-color: #DADBD9;
+    }
+
+    .button:hover {
+        border: 3px inset #941812;
+        cursor: pointer;
+    }
+
+    .contained {
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+        max-height: 800px;
+        overflow: scroll;
+        overflow-x: hidden;
+    }
+
+    .h1span {
+        color: black;
+        text-shadow: 3px 3px 3px #DADBD9;
+        font-weight: 600;
+        font-size: x-large;
+        margin: 5px;
+        padding: 5px;
+        border: 3px outset #941812;
+        background-color: #DADBD9;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        text-align: center;
+        justify-self: center;
+    }
+
+    .h2span {
+        color: black;
+        text-shadow: 3px 3px 3px #DADBD9;
+        font-weight: 400;
+        font-size: medium;
+        margin: 5px;
+        padding: 5px;
+        border: 3px outset #941812;
+        background-color: #DADBD9;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+        text-align: center;
+        justify-self: center;
+    }
+
+    .card {
+        line-height: 1.5rem;
+        margin: 5px;
+        padding: 3px;
+        text-align: center;
+        font-size: large;
+        font-weight: 500;
+        width: 40%;
+        border: 3px outset #941812;
+        border-radius: 20px;
+        background-color: #DADBD9;
+        color: black;
+        text-decoration: none;
+        text-shadow: 5px 5px 5px black;
+    }
+    .contain {
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+    }
+
+    .containing {
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+    }
+
+    .containSpan {
+        border: 3px outset #941812;
+        background-color: #DADBD9;
+        color: black;
+        text-decoration: none;
+        text-shadow: 5px 5px 5px black;
+        width: 30%;
+        margin: 3px;
+        margin-top: 10px;
+        padding: 3px;
+    }
+</style>
+@if (Model.Count() == 0)
+{
+<div>
+    <span class="h1span">
+        Your cart is empty!
+    </span>
     <div>
         <a onclick="history.back()">Return to order screen</a>
     </div>
 </div>
+}
+else
+{
+<div class="contain">
+    <span class="h1span">
+        Thank you for your purchase!
+    </span>
+    <span class="h2span">
+        You have ordered the following items...
+    </span>
+</div>
+<div class="contained">
+   
+    @foreach (var item in Model)
+    {
+        <div class="card">
+            <div>
+                Ordered Product:
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </div>
+            <div>
+                SKU #
+                @Html.DisplayFor(modelItem => item.OrderedProduct)
+            </div>
+            <div>
+                Quantity:
+                @Html.DisplayFor(modelItem => item.OrderedProductAmount)
+            </div>
+        </div>
+
+    }
+    
+</div>
+<div class="containing">
+    <div class="containSpan">
+        <div>
+            Order total: $
+            @for (int i = 1; i == (Model.Count() - (Model.Count() - 1)); i++)
+            {
+                foreach (var item in Model)
+                {
+
+                    @Html.DisplayFor(modelItem => item.OrderTotal)
+                    i++;
+                    if (i > 1)
+                    {
+                        break;
+                    }
+                }
+            }
+        </div>
+        <div>
+            Order Date:
+            @for (int i = 1; i == (Model.Count() - (Model.Count() - 1)); i++)
+            {
+                foreach (var item in Model)
+                {
+
+                    @Html.DisplayFor(modeilItem => item.OrderDate)
+                    i++;
+                    if (i > 1)
+                    {
+                        break;
+                    }
+                }
+            }
+        </div>
+    </div>
+    <div class="button">
+        <a onclick="history.back()">Return to order screen</a>
+    </div>
+</div>
+   
+}
+
+
+<script>
+    !function (t, e) { "object" == typeof exports && "object" == typeof module ? module.exports = e() : "function" == typeof define && define.amd ? define([], e) : "object" == typeof exports ? exports.bubbles = e() : t.bubbles = e() }(window, (function () { return function (t) { var e = {}; function n(r) { if (e[r]) return e[r].exports; var i = e[r] = { i: r, l: !1, exports: {} }; return t[r].call(i.exports, i, i.exports, n), i.l = !0, i.exports } return n.m = t, n.c = e, n.d = function (t, e, r) { n.o(t, e) || Object.defineProperty(t, e, { enumerable: !0, get: r }) }, n.r = function (t) { "undefined" != typeof Symbol && Symbol.toStringTag && Object.defineProperty(t, Symbol.toStringTag, { value: "Module" }), Object.defineProperty(t, "__esModule", { value: !0 }) }, n.t = function (t, e) { if (1 & e && (t = n(t)), 8 & e) return t; if (4 & e && "object" == typeof t && t && t.__esModule) return t; var r = Object.create(null); if (n.r(r), Object.defineProperty(r, "default", { enumerable: !0, value: t }), 2 & e && "string" != typeof t) for (var i in t) n.d(r, i, function (e) { return t[e] }.bind(null, i)); return r }, n.n = function (t) { var e = t && t.__esModule ? function () { return t.default } : function () { return t }; return n.d(e, "a", e), e }, n.o = function (t, e) { return Object.prototype.hasOwnProperty.call(t, e) }, n.p = "", n(n.s = 0) }([function (t, e, n) { "use strict"; n.r(e); var r = function (t) { return t.replace(/(_\w)/g, (function (t) { return t[1].toUpperCase() })) }, i = function (t, e) { return Math.random() * (e - t) + t }; function a(t, e) { for (var n = 0; n < e.length; n++) { var r = e[n]; r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(t, r.key, r) } } var o = function () { function t() { !function (t, e) { if (!(t instanceof e)) throw new TypeError("Cannot call a class as a function") }(this, t), this.currentFrame = 0, this.lifetime = 30, this.interpolation = "linear", this.x = 0, this.xSpeed = 0, this._xSpeedPoints = null, this.xAcceleration = 0, this._xAccelerationPoints = null, this.y = 0, this.ySpeed = 0, this._ySpeedPoints = null, this.yAcceleration = 0, this._yAccelerationPoints = null, this.scale = 1, this._scalePoints = null, this.opacity = 1, this._opacityPoints = null, this.rotation = 0, this._rotationPoints = null, this.shape = "square", this.colourise = !1, this.red = 255, this._redPoints = null, this.green = 255, this._greenPoints = null, this.blue = 255, this._bluePoints = null } var e, n, i; return e = t, i = [{ key: "loadFromObject", value: function (e) { for (var n = new t, i = 0, a = Object.keys(e); i < a.length; i++) { var o = a[i], s = r(o); s in n && (e[o] instanceof Array && e[o].length > 1 ? (n[s] = e[o][0], n["_" + s + "Points"] = e[o]) : n[s] = e[o]) } return n } }], (n = [{ key: "update", value: function (t) { this.xAcceleration += this._interpolate(this._xAccelerationPoints), this.yAcceleration += this._interpolate(this._yAccelerationPoints), this.xSpeed += this._interpolate(this._xSpeedPoints) + this.xAcceleration, this.ySpeed += this._interpolate(this._ySpeedPoints) + this.yAcceleration, this.x += this.xSpeed * t, this.y += this.ySpeed * t, this.scale += this._interpolate(this._scalePoints), this.opacity += this._interpolate(this._opacityPoints), this.rotation += this._interpolate(this._rotationPoints), this.red += this._interpolate(this._redPoints), this.green += this._interpolate(this._greenPoints), this.blue += this._interpolate(this._bluePoints), this.currentFrame++ } }, { key: "isDead", value: function () { return this.currentFrame > this.lifetime } }, { key: "_interpolate", value: function (t) { if (null === t) return 0; var e = ~~(this.lifetime / (t.length - 1)), n = ~~(this.currentFrame / e), r = t[n], i = n + 1 < t.length ? t[n + 1] : t[n], a = n * e, o = (n + 1) * e; return this["_" + this.interpolation + "Interpolate"](r, i, a, o) } }, { key: "_linearInterpolate", value: function (t, e, n, r) { return (e - t) / (r - n) } }, { key: "_cosineInterpolate", value: function (t, e, n, r) { return (e - t) / (r - n) * (Math.PI / 2) * Math.sin(Math.PI * (this.currentFrame - n) / (r - n)) } }]) && a(e.prototype, n), i && a(e, i), t }(); function s(t, e) { return function (t) { if (Array.isArray(t)) return t }(t) || function (t, e) { if ("undefined" == typeof Symbol || !(Symbol.iterator in Object(t))) return; var n = [], r = !0, i = !1, a = void 0; try { for (var o, s = t[Symbol.iterator](); !(r = (o = s.next()).done) && (n.push(o.value), !e || n.length !== e); r = !0); } catch (t) { i = !0, a = t } finally { try { r || null == s.return || s.return() } finally { if (i) throw a } } return n }(t, e) || function (t, e) { if (!t) return; if ("string" == typeof t) return u(t, e); var n = Object.prototype.toString.call(t).slice(8, -1); "Object" === n && t.constructor && (n = t.constructor.name); if ("Map" === n || "Set" === n) return Array.from(t); if ("Arguments" === n || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return u(t, e) }(t, e) || function () { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.") }() } function u(t, e) { (null == e || e > t.length) && (e = t.length); for (var n = 0, r = new Array(e); n < e; n++)r[n] = t[n]; return r } function c(t, e) { for (var n = 0; n < e.length; n++) { var r = e[n]; r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(t, r.key, r) } } var l = function () { function t() { !function (t, e) { if (!(t instanceof e)) throw new TypeError("Cannot call a class as a function") }(this, t), this.particleSettings = {}, this.particleVariation = { lifetime: 0, xSpeed: 0, ySpeed: 0, xAcceleration: 0, yAcceleration: 0, scale: 0, opacity: 0, rotation: 0, red: 0, green: 0, blue: 0 }, this.particles = new Set, this.x = 0, this.y = 0, this.width = 0, this.height = 0, this.spawns = -1, this._currentSpawn = 0, this.frames = 30, this._currentFrame = 0, this.maxParticles = 1e3, this.spawnAmount = 10 } var e, n, a; return e = t, a = [{ key: "loadFromObject", value: function (e) { for (var n = new t, i = 0, a = Object.keys(e); i < a.length; i++) { var o = a[i], s = r(o); s in n && (n[s] = e[o]) } return n } }], (n = [{ key: "update", value: function () { 0 === this._currentFrame && this._spawnBatch(), this._currentFrame++, this._currentFrame %= this.frames } }, { key: "isDead", value: function () { return -1 != this.spawns && this._currentSpawn > this.spawns && 0 == this.particles.size } }, { key: "reset", value: function () { this._currentSpawn = 0 } }, { key: "_spawnParticle", value: function () { for (var t = this, e = {}, n = function () { var n = s(a[r], 2), o = n[0], u = n[1]; o in t.particleVariation ? e[o] = u instanceof Array ? u.map((function (e, n) { return i(e - t.particleVariation[o][n], e + t.particleVariation[o][n]) })) : i(u - t.particleVariation[o], u + t.particleVariation[o]) : e[o] = u }, r = 0, a = Object.entries(this.particleSettings); r < a.length; r++)n(); return e.x = i(this.x, this.x + this.width), e.y = i(this.y, this.y + this.height), o.loadFromObject(e) } }, { key: "_spawnBatch", value: function () { var t; if (-1 != this.spawns && this._currentSpawn++, this._currentSpawn <= this.spawns || -1 === this.spawns) for (t = 0; t < this.spawnAmount; t++)this.particles.size < this.maxParticles && this.particles.add(this._spawnParticle()) } }]) && c(e.prototype, n), a && c(e, a), t }(); function h(t, e) { var n; if ("undefined" == typeof Symbol || null == t[Symbol.iterator]) { if (Array.isArray(t) || (n = function (t, e) { if (!t) return; if ("string" == typeof t) return f(t, e); var n = Object.prototype.toString.call(t).slice(8, -1); "Object" === n && t.constructor && (n = t.constructor.name); if ("Map" === n || "Set" === n) return Array.from(t); if ("Arguments" === n || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return f(t, e) }(t)) || e && t && "number" == typeof t.length) { n && (t = n); var r = 0, i = function () { }; return { s: i, n: function () { return r >= t.length ? { done: !0 } : { done: !1, value: t[r++] } }, e: function (t) { throw t }, f: i } } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.") } var a, o = !0, s = !1; return { s: function () { n = t[Symbol.iterator]() }, n: function () { var t = n.next(); return o = t.done, t }, e: function (t) { s = !0, a = t }, f: function () { try { o || null == n.return || n.return() } finally { if (s) throw a } } } } function f(t, e) { (null == e || e > t.length) && (e = t.length); for (var n = 0, r = new Array(e); n < e; n++)r[n] = t[n]; return r } function p(t, e) { for (var n = 0; n < e.length; n++) { var r = e[n]; r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(t, r.key, r) } } var y = function () { function t() { !function (t, e) { if (!(t instanceof e)) throw new TypeError("Cannot call a class as a function") }(this, t), this._emitters = new Set, this._deadEmitters = new Set, this.x = 0, this.xSpeed = 0, this.y = 0, this.ySpeed = 0, this.loops = -1, this._currentLoop = 1 } var e, n, i; return e = t, i = [{ key: "loadFromObject", value: function (e) { for (var n = new t, i = 0, a = Object.keys(e); i < a.length; i++) { var o = a[i], s = r(o); if ("emitters" === o) { var u, c = h(e.emitters); try { for (c.s(); !(u = c.n()).done;) { var f = u.value; n.addEmitter(l.loadFromObject(f)) } } catch (t) { c.e(t) } finally { c.f() } } else s in n && (n[s] = e[o]) } return n } }], (n = [{ key: "update", value: function () { var t = this, e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : 1; this.x += this.xSpeed * e, this.y += this.ySpeed * e, this._emitters.forEach((function (n) { n.update(), n.isDead() && t._deadEmitters.add(n); var r = new Set; n.particles.forEach((function (n) { n.update(e), n.x -= t.xSpeed * e, n.y -= t.ySpeed * e, n.isDead() && r.add(n) })), r.forEach((function (t) { n.particles.delete(t) })) })), this._deadEmitters.size == this._emitters.size && (this._currentLoop < this.loops || -1 === this.loops) && (this._deadEmitters.forEach((function (t) { t.reset() })), -1 != this.loops && this._currentLoop++, this._deadEmitters.clear()) } }, { key: "addEmitter", value: function () { for (var t = this, e = arguments.length, n = new Array(e), r = 0; r < e; r++)n[r] = arguments[r]; return n.forEach((function (e) { t._emitters.add(e) })), this } }, { key: "getEmitters", value: function () { return this._emitters } }, { key: "setPos", value: function (t, e) { return this.x = t, this.y = e, this } }, { key: "isDead", value: function () { return this.current_loops > this.loops != -1 && this._emitters.size } }]) && p(e.prototype, n), i && p(e, i), t }(); function d(t, e) { if (!(t instanceof e)) throw new TypeError("Cannot call a class as a function") } function v(t, e) { for (var n = 0; n < e.length; n++) { var r = e[n]; r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(t, r.key, r) } } var b = function () { function t() { var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : 32; d(this, t), this.baseSize = e } var e, n, r; return e = t, (n = [{ key: "renderEffect", value: function (t, e) { var n = this, r = e.getContext("2d"); t.getEmitters().forEach((function (e) { e.particles.forEach((function (e) { var i, a = { x: t.x + e.x - n.baseSize * e.scale / 2, y: t.y + e.y - n.baseSize * e.scale / 2 }; n["_render" + (i = e.shape, i[0].toUpperCase() + i.substring(1).toLowerCase())](e, r, a) })) })) } }, { key: "_renderCircle", value: function (t, e, n) { var r = t.scale * this.baseSize / 2; r > 0 && (e.beginPath(), e.fillStyle = "rgba( ".concat(t.red, ", ").concat(t.green, ", ").concat(t.blue, ", ").concat(t.opacity, ")"), e.arc(n.x, n.y, r, 0, 2 * Math.PI, !1), e.fill()) } }, { key: "_renderSquare", value: function (t, e, n) { e.fillStyle = "rgba( ".concat(t.red, ", ").concat(t.green, ", ").concat(t.blue, ", ").concat(t.opacity, ")"), e.setTransform(1, 0, 0, 1, n.x, n.y), e.rotate(t.rotation * Math.PI / 180), e.fillRect(t.scale * this.baseSize / 2, t.scale * this.baseSize / 2, t.scale * this.baseSize, t.scale * this.baseSize), e.setTransform(1, 0, 0, 1, 0, 0) } }]) && v(e.prototype, n), r && v(e, r), t }(); function m(t, e) { var n; if ("undefined" == typeof Symbol || null == t[Symbol.iterator]) { if (Array.isArray(t) || (n = function (t, e) { if (!t) return; if ("string" == typeof t) return _(t, e); var n = Object.prototype.toString.call(t).slice(8, -1); "Object" === n && t.constructor && (n = t.constructor.name); if ("Map" === n || "Set" === n) return Array.from(t); if ("Arguments" === n || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _(t, e) }(t)) || e && t && "number" == typeof t.length) { n && (t = n); var r = 0, i = function () { }; return { s: i, n: function () { return r >= t.length ? { done: !0 } : { done: !1, value: t[r++] } }, e: function (t) { throw t }, f: i } } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.") } var a, o = !0, s = !1; return { s: function () { n = t[Symbol.iterator]() }, n: function () { var t = n.next(); return o = t.done, t }, e: function (t) { s = !0, a = t }, f: function () { try { o || null == n.return || n.return() } finally { if (s) throw a } } } } function _(t, e) { (null == e || e > t.length) && (e = t.length); for (var n = 0, r = new Array(e); n < e; n++)r[n] = t[n]; return r } function g(t, e) { if (!(t instanceof e)) throw new TypeError("Cannot call a class as a function") } function w(t, e) { for (var n = 0; n < e.length; n++) { var r = e[n]; r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(t, r.key, r) } } var S = function () { function t(e) { var n = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : 32; g(this, t), this.renderer = new b(n), this.canvas = document.querySelector(e), this.particleEffects = [], this.update = this.update.bind(this), this.update() } var e, n, r; return e = t, (n = [{ key: "registerEffect", value: function (t) { return this.particleEffects.push(y.loadFromObject(t)), this } }, { key: "update", value: function () { this.canvas.getContext("2d").clearRect(0, 0, this.canvas.width, this.canvas.height); var t, e = m(this.particleEffects); try { for (e.s(); !(t = e.n()).done;) { var n = t.value; n.update(), this.renderer.renderEffect(n, this.canvas) } } catch (t) { e.e(t) } finally { e.f() } requestAnimationFrame(this.update) } }]) && w(e.prototype, n), r && w(e, r), t }(); window.Bubbles = S }]) }));
+
+    /* Start config */
+
+    function getMousePos(e) {
+        return {
+            x: e.clientX + document.body.scrollLeft,
+            y: e.clientY + document.body.scrollTop,
+        };
+    }
+
+    function mouseMove(event) {
+        var pos = getMousePos(event);
+        bubbles.particleEffects[0].x = pos.x;
+        bubbles.particleEffects[0].y = pos.y;
+    }
+
+    function setCanvasSize() {
+        bubbles.canvas.width = window.innerWidth;
+        bubbles.canvas.height = window.innerHeight;
+    }
+
+    const bubbles = new Bubbles("#confetti").registerEffect(
+        {
+            "loops": -1,
+            "emitters": [
+                {
+                    "width": 8,
+                    "height": 8,
+                    "frames": 10,
+                    "spawn_amount": 10,
+                    "spawns": 10,
+                    "particle_settings": {
+                        "lifetime": 180,
+                        "x_speed": [0, 0],
+                        "y_speed": -4,
+                        "y_acceleration": 0.05,
+                        "scale": [0.4, 0],
+                        "shape": "square",
+                        "rotation": [0, 90],
+                        "colourise": true,
+                        "red": 150,
+                        "green": 150,
+                        "blue": 150
+                    },
+                    "particle_variation": {
+                        "lifetime": 30,
+                        "x_speed": [1, 1],
+                        "x_acceleration": 0.2,
+                        "y_speed": 0.5,
+                        "scale": [0.2, 0],
+                        "rotation": [180, 90],
+                        "red": 100,
+                        "green": 100,
+                        "blue": 100
+                    }
+                }
+            ]
+        }
+    );
+
+    window.addEventListener("load", function () {
+        document.onmousemove = mouseMove;
+        window.onresize = setCanvasSize;
+        setCanvasSize();
+    });
+</script>

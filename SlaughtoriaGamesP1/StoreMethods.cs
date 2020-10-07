@@ -65,6 +65,10 @@ namespace SlaughtoriaGamesP1
         //Gets search results for _ListSearchResults in Customer controller
         public static List<Customers> GetSearchResults(string name, SGDB2Context _db)
         {
+            if(name.Length == 0 || name == null)
+            {
+                name = "";
+            }
             name = name.ToUpper();
 
             var result = (from Customers in _db.Customers
@@ -111,10 +115,10 @@ namespace SlaughtoriaGamesP1
         }
 
         //Retrieves existing item for edit/delete in Stores Controller
-        public static OrderInformation ManipulateCartItem(OrderInformation cartItem, List<OrderInformation> cart)
+        public static OrderInformation ManipulateCartItem(int itemId, List<OrderInformation> cart)
         {
             var item = (from OrderInformation in cart
-                          where cartItem.OrderedProduct == OrderInformation.OrderedProduct
+                          where itemId == OrderInformation.OrderedProduct
                           select OrderInformation
                        ).FirstOrDefault();
             return item;

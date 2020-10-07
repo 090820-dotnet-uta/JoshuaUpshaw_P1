@@ -10,12 +10,33 @@ namespace SlaughtoriaGamesP1.Models
     {
         [Key]
         public int CustomerId { get; set; }
+
+        [Required(ErrorMessage = "Invalid entry")]
+        [StringLength(40, MinimumLength =1, ErrorMessage ="Invalid length")]
         public string FirstName { get; set; }
+
+        [Required(ErrorMessage = "Invalid entry")]
+        [StringLength(40, MinimumLength = 1, ErrorMessage = "Invalid length")]
         public string LastName { get; set; }
+
+        [Required(ErrorMessage = "Invalid entry")]
+        [StringLength(40, MinimumLength = 1, ErrorMessage = "Invalid length")]
         public string UserName { get; set; }
+
+        [Required(ErrorMessage = "Invalid entry")]
+        [StringLength(40, MinimumLength = 1, ErrorMessage = "Invalid length")]
         public string Pword { get; set; }
+
+        [Required(ErrorMessage = "Invalid entry")]
+        [StringLength(40, MinimumLength = 1, ErrorMessage = "Invalid length")]
         public string City { get; set; }
+
+        [Required(ErrorMessage = "Invalid entry")]
+        [StringLength(40, MinimumLength = 1, ErrorMessage = "Invalid length")]
         public string State { get; set; }
+
+        [Required(ErrorMessage = "Invalid entry")]
+        [StringLength(40, MinimumLength = 1, ErrorMessage = "Invalid length")]
         public string Street { get; set; }
         public decimal Zip { get; set; }
         public string AptNum { get; set; } = null;

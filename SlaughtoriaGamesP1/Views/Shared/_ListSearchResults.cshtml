@@ -2,47 +2,88 @@
 
 <style>
 
+    body {
+        background-image: url(https://i1.wp.com/windowscustomization.com/wp-content/uploads/2020/05/Deep-Rock-Galactic-Magma.gif?fit=768%2C432&quality=80&strip=all&ssl=1);
+        background-repeat: no-repeat;
+        background-position: top;
+        background-size: cover;
+        height: 100vh;
+        padding: 0;
+        margin: 0;
+        overflow: scroll;
+    }
 
+
+    .h1span {
+        color: black;
+        text-shadow: 3px 3px 3px #DADBD9;
+        font-weight: 600;
+        font-size: x-large;
+        margin: 5px;
+        padding: 5px;
+        border: 3px outset #941812;
+        background-color: #DADBD9;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        text-align: center;
+        justify-self: center;
+    }
 </style>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CustomerId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CustomerId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserName)
-            </td>
-        </tr>
+@if (Model.Count() == 0)
+{
+    <div>
+        <span class="h1span">
+            Your cart is empty!
+        </span>
+        <div>
+            <a onclick="history.back()">Return to order screen</a>
+        </div>
+    </div>
 }
-    </tbody>
-</table>
-<button onclick="history.back()">Return to previous page...</button>
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.CustomerId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UserName)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CustomerId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserName)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button onclick="history.back()">Return to previous page...</button>
+
+}
 
 <script>
 
