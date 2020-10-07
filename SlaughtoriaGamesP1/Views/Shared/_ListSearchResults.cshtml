@@ -13,31 +13,79 @@
         overflow: scroll;
     }
 
-
     .h1span {
-        color: black;
-        text-shadow: 3px 3px 3px #DADBD9;
+        color: #903108;
+        text-shadow: 3px 3px 3px #7E6348;
         font-weight: 600;
         font-size: x-large;
         margin: 5px;
         padding: 5px;
-        border: 3px outset #941812;
-        background-color: #DADBD9;
+        border: 3px outset #903108;
+        background-color: #F7D03B;
         border-top-left-radius: 20px;
         border-top-right-radius: 20px;
         text-align: center;
         justify-self: center;
     }
+
+    .contain {
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+        margin: 5px;
+    }
+
+    .button {
+        border: 3px outset #903108;
+        border-radius: 20px;
+        text-decoration: none;
+        color: #903108;
+        text-shadow: 3px 3px 3px #7E6348;
+        padding: 7px;
+        margin: 5px;
+        background-color: #F7D03B;
+    }
+
+    .button:hover{
+         border: 3px inset #903108;
+        cursor: pointer;
+    }
+
+    thead {
+        border-bottom: 5px solid #903108;
+        background-color: #F7D03B;
+        text-shadow: 3px 3px 3px #7E6348;
+        color: #903108;
+        opacity: 0.75;
+        text-align: center;
+    }
+
+    tr {
+        border-bottom: 5px solid #903108;
+        border-top: none;
+        background-color: #7E6348;
+        text-shadow: 2px 1px 2px #F7D03B;
+        color: #903108;
+        text-align: center;
+        opacity: 0.8;
+    }
 </style>
 
 @if (Model.Count() == 0)
 {
-    <div>
-        <span class="h1span">
-            Your cart is empty!
-        </span>
+    <div class="contain">
         <div>
-            <a onclick="history.back()">Return to order screen</a>
+            <span class="h1span">
+                No results!
+            </span>
+        </div>
+        <hr/>
+        <div>
+            <a class="button" onclick="history.back()">Return to previous screen</a>
         </div>
     </div>
 }
@@ -58,7 +106,6 @@ else
                 <th>
                     @Html.DisplayNameFor(model => model.UserName)
                 </th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -81,7 +128,7 @@ else
             }
         </tbody>
     </table>
-    <button onclick="history.back()">Return to previous page...</button>
+    <button class="button" onclick="history.back()">Return to previous page...</button>
 
 }
 

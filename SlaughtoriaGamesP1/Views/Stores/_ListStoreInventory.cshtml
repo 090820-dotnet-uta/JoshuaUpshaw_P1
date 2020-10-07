@@ -2,36 +2,70 @@
 
 
 <style>
-    .card{
+    .card {
         padding: 15px;
         margin: 15px;
+        text-align: center;
+        border: 5px inset #A2143C;
+        text-shadow: -2px 4px 3px black;
+        font-weight: 600;
+        font-size: larger;
+        background-color: #343A40;
+        width: 50%;
+        border-radius: 20px;
     }
+
+    .contains{
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .button {
+        border: 3px outset #A2143C;
+        border-radius: 20px;
+        text-decoration: none;
+        color: #A2143C;
+        text-shadow: 3px 3px 3px black;
+        padding: 7px;
+        margin: 5px;
+        background-color: #343A40;
+    }
+    .button:hover{
+         border: 3px inset #A2143C;
+        cursor: pointer;
+    }
+
 </style>
 
-<h1>Shop Inventory</h1>
+<h1 class="text-center" style="text-decoration:underline; text-decoration-color: #343A40; text-shadow:-2px 4px 3px black;">
+    Shop Inventory
+</h1>
 
 @foreach (var item in Model)
 {
-    <div class="card">
-        <div>
-            @Html.DisplayFor(modelItem => item.Skunum)
-        </div>
+    <div class="contains">
+        <div class="card">
+            <div>
+                @Html.DisplayFor(modelItem => item.Skunum)
+            </div>
 
-        <div>
-            @Html.DisplayFor(modelItem => item.ProductName)
-        </div>
+            <div>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </div>
 
-        <div>
-            @Html.DisplayFor(modelItem => item.UnitPrice)
-        </div>
+            <div>
+                @Html.DisplayFor(modelItem => item.UnitPrice)
+            </div>
 
-        <div>
-            @Html.DisplayFor(modelItem => item.ProductDescrip)
-        </div>
+            <div>
+                @Html.DisplayFor(modelItem => item.ProductDescrip)
+            </div>
 
-        <div>
-            @Html.DisplayFor(modelItem => item.ProductCurrentQuantity)
+            <div>
+                @Html.DisplayFor(modelItem => item.ProductCurrentQuantity)
+            </div>
         </div>
     </div>
 }
-<button onclick="history.back()">Return to previous page</button>
+<button class="button" onclick="history.back()">Return to previous page</button>

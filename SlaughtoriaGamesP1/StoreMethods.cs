@@ -65,11 +65,14 @@ namespace SlaughtoriaGamesP1
         //Gets search results for _ListSearchResults in Customer controller
         public static List<Customers> GetSearchResults(string name, SGDB2Context _db)
         {
-            if(name.Length == 0 || name == null)
+            if(name == null || name.Length == 0)
             {
-                name = "";
+                name = "9";
             }
-            name = name.ToUpper();
+            else
+            {
+                name = name.ToUpper();
+            }
 
             var result = (from Customers in _db.Customers
                           where Customers.LastName.ToUpper() == name || Customers.LastName.ToUpper().Contains(name)
